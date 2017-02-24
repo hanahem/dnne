@@ -32,7 +32,6 @@ app.controller('FormCtrl', function($scope, $http, LayerService) {
     }];
     
     //View monitoring and the stack of layers
-    $scope.curr = {};
     $scope.layerStack = [];
     
     /**
@@ -57,12 +56,12 @@ app.controller('CodeOutCtrl', function($scope, $http, LayerService, $timeout){
  
   $scope.code = [];
   
-   /**
-    * pyWrap : this function wraps the layer stack around Keras
-    * input : stack (attribute of layerStack object)
-    * @return : the python code into a list of strings representing the code lines
+  /**
+   * pyWrap : this function wraps the layer stack around Keras
+   * input : stack (attribute of layerStack object)
+   * @return : the python code into a list of strings representing the code lines
    **/
-   $scope.kerasWrap = function(stack){
+  $scope.kerasWrap = function(stack){
     
   }
   
