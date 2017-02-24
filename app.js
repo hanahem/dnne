@@ -2,14 +2,18 @@
 var app = angular.module('dnneApp', []);
 
 //==============SERVICES================
-//Angular Services : share vars between controllers
+/**
+ * Angular Service : sharing scope between controllers
+**/
 app.service('LayerService', function() {
   return {stack: ''};
 });
 
 
 //=============CONTROLLERS==============
-//FORM CONTROLLER
+/**
+ * FormCtrl Controller : manages the FORM DIV view
+**/
 app.controller('FormCtrl', function($scope, $http, LayerService) {
     
     //List of forms for each layer type name, and parameters
@@ -31,6 +35,11 @@ app.controller('FormCtrl', function($scope, $http, LayerService) {
     $scope.curr = {};
     $scope.layerStack = [];
     
+    /**
+     * submit : this functions pushes the current form values into the stack of layers
+     * and updates the LayerService
+     * input : form (a json-string object with attributes name, and params)
+    **/
     $scope.submit = function(form){
       $scope.layerStack.push(form);
       LayerService.stack = $scope.layerStack
@@ -38,7 +47,9 @@ app.controller('FormCtrl', function($scope, $http, LayerService) {
     
 });
 
-//CODE OUTPUT CONTROLLER
+/**
+ * CodeOutCtrl Controller : manages the CODE OUTPUT DIV view
+**/
 app.controller('CodeOutCtrl', function($scope, $http, LayerService, $timeout){
   
   //Extraction of the layerStack shared in LayerService
@@ -46,10 +57,13 @@ app.controller('CodeOutCtrl', function($scope, $http, LayerService, $timeout){
  
   $scope.code = [];
   
-  $scope.pyWrap = function(stack){
-    angular.forEach(stack, function(value, key){
-      this.push(value + ':' + key);
-    }, code);
+   /**
+    * pyWrap : this function wraps the layer stack around Keras
+    * input : stack (attribute of layerStack object)
+    * @return : the python code into a list of strings representing the code lines
+   **/
+   $scope.kerasWrap = function(stack){
+    
   }
   
 });

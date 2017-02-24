@@ -48,14 +48,13 @@
       <pre class="prettyprint linenums">
       <code class="language-python">
         from keras.models import Sequential
-        from keras.layers import Dense, Flatten
         model = Sequential()
       </code>
       <code ng-repeat="elem in layerStack.stack" class="language-python">
-      model.add({{elem.name}}())
+      model.add({{elem.name}}({{elem.params[0].size}}, activation='{{elem.params[0].activation}}'))
       </code>
       </pre>
-      <input type="button" value="Update">
+      
 
     </section>
     
