@@ -1,66 +1,26 @@
 <!DOCTYPE html>
-<html ng-app="dnneApp">
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deep Neural Net Editor</title>
 
-  <head>
-    <meta charset="utf-8" />
-    <title>AngularJS Plunker</title>
-    <link rel="stylesheet" href="style.css" />
-    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.1/angular.min.js"></script>
-    <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?lang=css&amp;skin=sunburst"></script>
-    <script src="app.js"></script>
-  </head>
+<meta charset="UTF-8">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gojs/1.7.3/go.js"></script>
+<script id="code">
 
-  <body>
-  <!--FORM DIV-->
-  <div ng-controller="FormCtrl">
-    
-    <form name="{{form.name}}"
-      ng-repeat="form in forms" class="form-style-6">
-          
-      <div ng-repeat="param in form.params">
-        <select type="text" ng-model="param.activation">
-          <option value="sigmoid">Sigmoid</option>
-          <option value="relu">ReLu</option>
-          <option value="tanh">tanH</option>
-        </select>
-        <input type="number" ng-model="param.size" min="1"/>
-      </div>
-     
-      <input type="button" ng-click="submit(form)" value="{{form.name}}">
-      <pre>Current : {{form}}</pre>
-    
-    </form>
-  <pre id="wass">master : {{layerStack}}</pre>
-  </div>
+</script>
+</head>
+<body onload="init()">
+  <div id="sample">
+
+    <div id="myDiagramDiv" style="border: solid 1px black; width:100%; height:600px;"></div>
   
-  <!--CANVAS DIV-->
-  <div>
-    
-  </div>
+    <button onclick="addLayer()">Test click</button>
+    <textarea id="mySavedModel" style="width:100%;height:300px;"></textarea>
   
-  <!--CODEOUT DIV-->
-  <div ng-controller="CodeOutCtrl" >
-    
-    <section ng-model="layerStack">{{layerStack.stack}}</section>
-    <section ng-model="layerStack.stack">
-      
-      
-      <pre class="prettyprint linenums">
-      <code class="language-python">
-        from keras.models import Sequential
-        model = Sequential()
-      </code>
-      <code ng-repeat="elem in layerStack.stack" class="language-python">
-      model.add({{elem.name}}({{elem.params[0].size}}, activation='{{elem.params[0].activation}}'))
-      </code>
-      </pre>
-      
-
-    </section>
-    
   </div>
-  
-  </body>
-
+</body>
+<script src="script.js"></script>
+<script src="utils.js"></script>
+<script src="encoders.js"></script>
 </html>
-
