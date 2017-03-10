@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deep Neural Net Editor</title>
+
+<meta charset="UTF-8">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gojs/1.7.3/go.js"></script>
+<script id="code">
+
+</script>
+</head>
+<body onload="init()">
+  <div id="sample">
+
+    <div id="myDiagramDiv" style="border: solid 1px black; width:100%; height:600px;"></div>
+  
+    <button onclick="addLayer()">Test click</button>
+    <textarea id="mySavedModel" style="width:100%;height:300px;"></textarea>
+  
+  </div>
+</body>
+<script src="script.js"></script>
+<script src="utils.js"></script>
+<script src="encoders.js"></script>
+</html>
