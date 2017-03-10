@@ -168,12 +168,12 @@
           linkFromPortIdProperty: "fromPort",
           linkToPortIdProperty: "toPort",
           nodeDataArray: [
-              { key: 1, name: "Server", inservices: [{ name: "in" }, { name: "in" }], outservices: [{ name: "" }, {name: ""}], loc: "0 0" },
-              { key: 2, name: "Other", inservices: [{ name: "in" }, { name: "in" }], loc: "200 60" },
+              { key: 1, name: "Server", inservices: [{ name: "i1" }, { name: "i2" }], outservices: [{ name: "o1" }, {name: "o2"}], loc: "0 0" },
+              { key: 2, name: "Other", inservices: [{ name: "i1" }, { name: "i1" }], loc: "200 60" },
               
             ],
           linkDataArray: [
-              { from: 1, fromPort: "out", to: 2, toPort: "in" },
+              { from: 1, fromPort: "o1", to: 2, toPort: "i1" },
               //{ from: 1, fromPort: "o1", to: 2, toPort: "s1" },
               //{ from: 1, fromPort: "", to: 2, toPort: "s2" },
               //{ from: 1, fromPort: "", to: 2, toPort: "s1" }
