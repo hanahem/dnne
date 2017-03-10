@@ -169,7 +169,7 @@
           linkToPortIdProperty: "toPort",
           nodeDataArray: [
               { key: 1, name: "Server", inservices: [{ name: "i1" }, { name: "i2" }], outservices: [{ name: "o1" }, {name: "o2"}], loc: "0 0" },
-              { key: 2, name: "Other", inservices: [{ name: "i1" }, { name: "i1" }], loc: "200 60" },
+              { key: 2, name: "Other", inservices: [{ name: "i1" }, { name: "i2" }], loc: "200 60" },
               
             ],
           linkDataArray: [
