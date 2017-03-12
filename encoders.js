@@ -12,6 +12,26 @@
  * @return: stack list of strings (representing the command lines)
  */ 
 function jsonToKeras(jsonModel) {
+  //TODO: architecture checking (1st case : MLP)
+  //================
+  //   Variables
+  //================
+  var layerStack = [];
+  var nodes = jsonModel.nodeDataArray;
+  var links = jsonModel.linkDataArray;
+  var inputLayer = {};
+  var outputLayer = {}
+  
+  for each (var layer in nodes){ //for loop to find and assign input and output layers
+    if (layer.key == 1){
+      inputLayer = layer;
+    }
+    else if (layer.key == 2){
+      outputLayer = layer;
+    }
+  }
+  
+  var currentLayer = outputLayer;
   
 }
 
