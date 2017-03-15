@@ -1,5 +1,5 @@
 /**
- * addLayer : adds a layer to test on a button
+ * addLayer : adds a layer (to test with a button)
  **/
 //static variable for hidden layers' keys
 var lastKey = 3;
@@ -9,6 +9,14 @@ function addLayer() {
     var elem = { key: lastKey, name: n, inservices: [{ name: "s1" }], outservices : [{ name: "o1"}], loc: loca };
     myDiagram.model.addNodeData(elem);
     lastKey++;
+}
+
+/**
+ * outputCode : updates the code output (to test with a button)
+ */
+function outputCode(){
+  codeOutput = jsonToKeras(stackerMLP(myDiagram.model));
+  document.getElementById("codeOutput").value = codeOutput;
 }
     
     
