@@ -1,9 +1,22 @@
+/**
+ * This script contains the init() function
+ * The function sets up the initial model and diagram configurations
+ * » it sets up the shapes
+ * » the nodes and links
+ * » the model & diagram
+ * » the grid
+ * It also manages monitoring the model through a JSON String dictionnary
+ */ 
   function init() {
     if (window.goSamples) goSamples();  // init for these samples -- you don't need to call this
     var $ = go.GraphObject.make;
-
+    
+    //===========================
+    //  Creating the diagram
+    //===========================
+    
     myDiagram =
-      $(go.Diagram, "myDiagramDiv",
+      $(go.Diagram, "myDiagramDiv", //The div's name to bind the diagram with
         {
           initialContentAlignment: go.Spot.Center,
           // For this sample, automatically show the state of the diagram's model on the page
@@ -15,7 +28,12 @@
 
     var UnselectedBrush = "dodgerblue";  // item appearance, if not "selected"
     var SelectedBrush = "green";   // item appearance, if "selected"
-
+    
+    
+    //==========================
+    //Item Template:Shape
+    //==========================
+    
     function makeItemTemplate(leftside) {
       return $(go.Panel, "Auto",
           { margin: new go.Margin(1, 0) },  // some space between ports
@@ -58,6 +76,10 @@
         );
     }
     
+    //==========================
+    //Adding node template: Spot
+    //==========================
+    
     //TODO: modify this variable into a function that maps the colors w.r.t. the layer name
     //var color = "grey";
     
@@ -76,8 +98,8 @@
             $(go.TextBlock,
               new go.Binding("text", "name"),
               { alignment: go.Spot.Left }),
-            $(go.Picture, "images/60x90.png",
-              { width: 10, height: 20, margin: new go.Margin(0, 0) })
+            $(go.Picture, "image", //add a "layer" image
+              { width: 10, height: 50, margin: new go.Margin(0, 0) })
           )
         ),
         $(go.Panel, "Vertical",
@@ -91,13 +113,22 @@
           { itemTemplate: makeItemTemplate(false) }
         )
       );
-
+    
+    //==========================
+    //  Adding link template
+    //==========================
+    
     myDiagram.linkTemplate =
       $(go.Link,
         { routing: go.Link.Orthogonal, corner: 10, toShortLength: -3 },
         { relinkableFrom: true, relinkableTo: true, reshapable: true, resegmentable: true },
         $(go.Shape, { stroke: "gray", strokeWidth: 2.5 })
       );
+      
+    
+    //=========================
+    //   Selection handler
+    //=========================
 
     function findAllSelectedItems() {
       var items = [];
@@ -125,6 +156,11 @@
       return items;
     }
 
+
+    //=========================
+    // All the command handlers
+    //=========================
+    
     // Override the standard CommandHandler deleteSelection and canDeleteSelection behavior.
     // If there are any selected items, delete them instead of deleting any selected nodes or links.
 
@@ -159,6 +195,10 @@
         go.CommandHandler.prototype.deleteSelection.call(myDiagram.commandHandler);
       }
     };
+    
+    //======================
+    // Creating the model
+    //======================
 
     myDiagram.model =
       $(go.GraphLinksModel,
@@ -168,20 +208,21 @@
           linkFromPortIdProperty: "fromPort",
           linkToPortIdProperty: "toPort",
           nodeDataArray: [
-              { key: 1, name: "Server", inservices: [{ name: "in" }, { name: "in" }], outservices: [{ name: "" }, {name: ""}], loc: "0 0" },
-              { key: 2, name: "Other", inservices: [{ name: "in" }, { name: "in" }], loc: "200 60" },
+              { key: 1, name: "Server", inservices: [{ name: "i1" }, { name: "i2" }], outservices: [{ name: "o1" }, {name: "o2"}], loc: "0 0" },
+              { key: 2, name: "Other", inservices: [{ name: "i1" }, { name: "i2" }], loc: "200 60" },
               
             ],
           linkDataArray: [
-              { from: 1, fromPort: "out", to: 2, toPort: "in" },
+              { from: 1, fromPort: "o1", to: 2, toPort: "i2" },
               //{ from: 1, fromPort: "o1", to: 2, toPort: "s1" },
               //{ from: 1, fromPort: "", to: 2, toPort: "s2" },
               //{ from: 1, fromPort: "", to: 2, toPort: "s1" }
             ]
         });
-  
-    //============GRID=============
-    //=============================
+
+    //=========================
+    //   Creating the Grid
+    //=========================
     
     myDiagram.grid.visible = true;
     myDiagram.grid.gridCellSize = new go.Size(30, 30);
@@ -189,9 +230,13 @@
     myDiagram.toolManager.resizingTool.isGridSnapEnabled = true;
 
     myDiagram.initialContentAlignment = go.Spot.Center;
-
+    
+    //=========================
+    //  monitoring the model
+    //=========================
+  
     showModel();
-
+    
     function showModel() {
       document.getElementById("mySavedModel").value = myDiagram.model.toJson();
     }

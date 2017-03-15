@@ -1,11 +1,14 @@
 /**
  * addLayer : adds a layer to test on a button
  **/
+//static variable for hidden layers' keys
+var lastKey = 3;
 function addLayer() {
     var n = "hello";
     var loca = "200 300";
-    var elem = { key: 3, name: n, inservices: [{ name: "s1" }, { name: "s2" }], loc: loca };
+    var elem = { key: lastKey, name: n, inservices: [{ name: "s1" }], outservices : [{ name: "o1"}], loc: loca };
     myDiagram.model.addNodeData(elem);
+    lastKey++;
 }
     
     
@@ -36,7 +39,7 @@ function generateNewPosition() {
 }
 
 /**
- * zoom: a function that zooms/unzooms on the model
+ * zoom: a function that zooms/unzooms on the model, it should be binded with the zoom buttons
  * IN: value
  * @return void: linked with entries from a zoom slider
  */
