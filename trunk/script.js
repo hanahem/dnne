@@ -27,7 +27,7 @@
         });
 
     var UnselectedBrush = "dodgerblue";  // item appearance, if not "selected"
-    var SelectedBrush = "green";   // item appearance, if "selected"
+    var SelectedBrush = "#ff447f";   // item appearance, if "selected"
     
     
     //==========================
@@ -236,9 +236,15 @@
     //=========================
   
     showModel();
+    outputCode();
     
     function showModel() {
       document.getElementById("mySavedModel").value = myDiagram.model.toJson();
+    }
+    
+    function outputCode(){
+      codeOutput = jsonToKeras(stackerMLP(myDiagram.model));
+      document.getElementById("codeOutput").value = codeOutput;
     }
     
 }
