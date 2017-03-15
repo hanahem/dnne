@@ -23,7 +23,7 @@ function jsonToKeras(layerStack) {
   //TODO: manage layers other than first, alone
   for (var i = 0; i < layerStack.length; i++) {
     codeLine = "";
-    currentLayer = layerStack.pop();
+    currentLayer = layerStack[i];
     codeLine = "model.add(" 
               + currentLayer.name 
               + "(" + currentLayer.outservices[0].name 
