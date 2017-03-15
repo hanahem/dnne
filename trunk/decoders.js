@@ -13,7 +13,22 @@
  */ 
 function jsonToKeras(layerStack) {
   //TODO: architecture checking (1st case : MLP)
-  
+  //TODO: architecture checking (1st case : MLP)
+  codeArray = [];
+
+  //TODO: manage layers other than first, alone
+  for (var i = 0; i < layerStack.length; i++) {
+    codeLine = "";
+    currentLayer = layerStack.pop();
+    codeLine = "model.add(" 
+              + currentLayer.name 
+              + "(" + currentLayer.outservices[0].name 
+              + ", activation = 'relu'))";
+    codeArray[i] = codeLine;
+  }
+
+  console.log(codeArray);
+  return codeArray
 }
 
 /**
