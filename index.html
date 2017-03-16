@@ -2,65 +2,146 @@
 <html ng-app="dnneApp">
 
   <head>
+
     <meta charset="utf-8" />
-    <title>AngularJS Plunker</title>
+    <title>Amélioration de la structure de notre Éditeur</title>
+    <!-- liens des feuilles css -->
     <link rel="stylesheet" href="style.css" />
-    <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.1/angular.min.js"></script>
+    <!-- liens vers les librairies utilisée -->
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular.min.js"></script>
     <script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?lang=css&amp;skin=sunburst"></script>
+    <script src="go-debug.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gojs/1.7.2/go-debug.js"></script>
+    <!-- liens vers les feuilles javascript -->
     <script src="app.js"></script>
+    <script type="text/javascript" src="tutogo.js"></script>
+    <script type="text/javascript" src="generate.js"></script>
+    <script type="text/javascript" src="genecodede.js"></script>
+    <script type="text/javascript" src="generatefile.js"></script>
+   
+    
+
+
   </head>
 
-  <body>
-  <!--FORM DIV-->
-  <div ng-controller="FormCtrl">
-    
-    <form name="{{form.name}}"
-      ng-repeat="form in forms" class="form-style-6">
-          
-      <div ng-repeat="param in form.params">
-        <select type="text" ng-model="param.activation">
-          <option value="sigmoid">Sigmoid</option>
-          <option value="relu">ReLu</option>
-          <option value="tanh">tanH</option>
-        </select>
-        <input type="number" ng-model="param.size" min="1"/>
-      </div>
-     
-      <input type="button" ng-click="submit(form)" value="{{form.name}}">
-      <pre>Current : {{form}}</pre>
-    
-    </form>
-  <pre id="wass">master : {{layerStack}}</pre>
-  </div>
-  
-  <!--CANVAS DIV-->
-  <div>
-    
-  </div>
-  
-  <!--CODEOUT DIV-->
-  <div ng-controller="CodeOutCtrl" >
-    
-    <section ng-model="layerStack">{{layerStack.stack}}</section>
-    <section ng-model="layerStack.stack">
-      
-      
-      <pre class="prettyprint linenums">
-      <code class="language-python">
-        from keras.models import Sequential
-        model = Sequential()
-      </code>
-      <code ng-repeat="elem in layerStack.stack" class="language-python">
-      model.add({{elem.name}}({{elem.params[0].size}}, activation='{{elem.params[0].activation}}'))
-      </code>
-      </pre>
-      
+  <body onload="goIntro()">
 
-    </section>
+    <aside>
+      Keras
+    </aside>
+
+    <nav class="gauche", class="resizable">
+        <!--Cadre où mettre la console-->
+        
+        <footer class="resizable">
+          <h3> Deep Learning Wiki </h6>
+          <p>Click the button below to generate a new deep learning definition.</p>
+          <button id="generateToken">Generate Definition</button>
+          <p id="showToken"></p>
+        </footer>
+
+        <div>
+          <button id="generatecode">Open the Code on a new page</button>
+
+          <button id="generatefile">Save the Code on a file.txt</button> 
+        </div>
+
+    </nav>
+
+
+    <article class="droite", class="resizable">
+      <!-- début du formulaire -->
+       <div ng-controller="FormCtrl">
     
+         <form name="{{form.name}}"
+          ng-repeat="form in forms" class="form-style-6">
+            
+            <div ng-repeat="param in form.params">
+              <select type="text" ng-model="param.activation">
+                <option value="sigmoid">Sigmoid</option>
+                <option value="relu">ReLu</option>
+                <option value="tanh">tanH</option>
+              </select>
+              <input type="number" ng-model="param.size" min="1"/>
+            </div>
+         
+          <input type="button" ng-click="submit(form)" value="{{form.name}}">
+          <pre>Current : {{form}}</pre>
+    
+          </form>
+          <pre id="wass">master : {{layerStack}}</pre>
+        </div>
+        <!-- fin du formulaire -->
+        <!-- début de la search box -->
+          <footer class="resizable">
+
+           <input type="text" name="search" placeholder="Search..">
+
+   
+          </footer>
+        <!-- fin de la search box -->
+          <div class="searchanswers">
+          <!-- ce sera plutot un "output" input mis seulement pour faire apparaitre le cadre sur la page ==> à modifier plus tard -->
+            <input type="text" name="searchans" placeholder="Answers..">
+            <br>
+            Cadre d'emplacement de réponse à la recherche 
+            <br>
+          </div>
+     </article>
+                      
+      <article class="milieu">    
+        <aside class="resizable">
+        <!-- titre de notre application -->
+          <h1>
+              Neural Networks Editor 
+          </h1>
+        </aside>
+      </article>
+         
+        <article class="milieu", class="resizable">
+             <!-- début du code -->
+        <div ng-controller="CodeOutCtrl" >
+          <pre class="prettyprint linenums", id="mon-code">
+          <section ng-model="layerStack">{{layerStack.stack}}</section>
+           <section ng-model="layerStack.stack">
+              
+              
+              
+            <code class="language-python">
+              from keras.models import Sequential
+              model = Sequential()
+            </code>
+            <code ng-repeat="elem in layerStack.stack" class="language-python">
+            model.add({{elem.name}}({{elem.params[0].size}}, activation='{{elem.params[0].activation}}'))
+            </code>
+          </pre>
+
+             <!-- fin du code -->
+          </section>
+    
+     <footer class="resizable">
+            Canva de l'éditeur 
+    </footer>
+     
   </div>
-  
+   <!-- début du canva -->
+    <!-- modifier width et height pour changer la dimension du canva -->
+  <div id="myDiagramDiv"
+     style="border: solid 1px blue; width:720px; height:550px"></div>
+
+   <!-- fin du canva -->
+      </article>  
+
+         <!-- début de la ligne de presentation -->
+      <footer class="resizable">
+      Projet L3C1 "Neural Networks Editor", Encadrant : David Janiszek
+      </footer>
+      <!-- fin de la ligne de presentation -->         
+        
   </body>
 
+
 </html>
+
 
