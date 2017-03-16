@@ -1,3 +1,6 @@
+/* css du titre */
+h1 { text-align: center; }
+
 /*test selector*/
 #wass{
   font: 95% Arial, Helvetica, sans-serif;
@@ -82,3 +85,79 @@
     background: #2EBC99;
 }
 
+/*le css de la search box*/
+.input[type=text] {
+    width: 130px;
+    -webkit-transition: width 0.4s ease-in-out;
+    transition: width 0.4s ease-in-out;
+}
+/* modifie le cadre avec width 100% quand la souris est sur le texte */
+input[type=text]:focus {
+    width: 100%;
+}
+
+.searchanswers {
+    border: 3.5px dashed #ea81ea;
+}
+/*le css du squelette de la page*/
+header { 
+    display: block;
+    padding: 0,2ex;
+    background-color: rgba(219, 112, 147, 0.62);
+   
+}
+
+body {
+    width: 100%;
+    background: #fff; 
+}
+
+
+article {
+    float: right;
+    background: rgba(219, 112, 215, 0.12);
+    margin-top: 0.5ex;
+    margin-bottom: 0.5ex;
+    padding: 2.5ex;
+   
+}
+
+aside { 
+    float:left;
+    width: 100%;
+    background: rgba(67, 209, 175, 0.6);
+    margin-top: 0.5ex;
+    
+}
+
+nav { 
+    float:left;
+    width: 30%;
+    background: rgba(67, 209, 175, 0.6);
+    margin-top: 0.5ex;
+    
+}
+/* css des différents cadres principaux milieu ,gauche et droite */
+.milieu {
+    width: 50%;
+}
+
+.droite {
+    width: 20%;
+}
+
+.gauche {
+    width: 23%;
+}
+
+.resizable {
+    resize: both;   
+    overflow: auto; 
+}
+
+footer { 
+    width: 100%;
+    clear: both;
+    margin: 1ex;
+    background: rgba(46, 188, 153, 0.75) ;
+}
