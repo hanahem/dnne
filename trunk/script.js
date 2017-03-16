@@ -236,15 +236,10 @@
     //=========================
   
     showModel();
-    outputCode();
     
     function showModel() {
       document.getElementById("mySavedModel").value = myDiagram.model.toJson();
     }
     
-    function outputCode(){
-      codeOutput = jsonToKeras(stackerMLP(myDiagram.model));
-      document.getElementById("codeOutput").value = codeOutput;
-    }
     
 }
