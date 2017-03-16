@@ -5,8 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
- <!-- liens des feuilles css -->
- <link rel="stylesheet" href="style.css" />
 
 <!-- GoJS & JQuery imports -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gojs/1.7.3/go.js"></script>
@@ -17,11 +15,10 @@
 <script src="https://static.zinoui.com/1.5/compiled/zino.draggable.min.js"></script>
 <script src="https://static.zinoui.com/1.5/compiled/zino.splitter.min.js"></script>
 <script src="https://static.zinoui.com/js/front.min.js"></script>
-<script src="https://cdn.rawgit.com/google/code-prettify/master/loader/run_prettify.js?lang=css&amp;skin=sunburst"></script>
 <link rel="stylesheet" href="https://static.zinoui.com/1.5/themes/silver/zino.core.css">
 <link rel="stylesheet" href="https://static.zinoui.com/1.5/themes/silver/zino.splitter.css">
 
-
+<style type="text/css">body{ font: normal 12px Arial, sans-serif;}</style>
 </head>
 
 <body onload="init()">
@@ -34,17 +31,8 @@
     </div>
     <div id="myDiagramDiv" class="splitter-center" style="width:100%; height:100%;"></div>
     <div class="splitter-east">
-      <textarea id="mySavedModel" style="width:100%;height:50%;"></textarea>
-          <pre class="prettyprint linenums", id="codeOutput" style="width:100%;height:50%;">
-              <code class="language-python">
-              <!-- Partie à revoir prise du prototype1 -->
-              from keras.models import Sequential
-              model = Sequential()
-              
-              model.add({{elem.name}}({{elem.params[0].size}}, activation='{{elem.params[0].activation}}'))
-              </code>
-          </pre>
-      
+      <textarea id="mySavedModel" style="width:100%;height:100%;"></textarea>
+      <textarea id="codeOutput" style="width:100%;height:100%;"></textarea>
     </div>
     
   </div>
@@ -63,7 +51,23 @@
       });
   });
   </script>
-   
+  
+  <style type="text/css">
+  #sample{
+      height: 800px;
+      width: 1335px; 
+      background-color: #957030;
+  }
+  .splitter-west{
+      background-color: #FFF;
+  }
+  .splitter-center{
+      background-color: #FFF;
+  }
+  .splitter-east{
+      background-color: #FFF;
+  }
+  </style>  
 
 </body>
 

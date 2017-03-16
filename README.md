@@ -9,4 +9,4 @@
 » create shapes with fixed positions (to drag and drop)
 » make the keras decoder
 » finish the draggable layout splitter (jquery or ui-angular ...) (or verify that ZinoUI is compatible with all platforms)
-» link the code output to the diagram
+» add the code output field
