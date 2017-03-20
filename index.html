@@ -27,13 +27,27 @@
 
 
     <div class="splitter-west">
-      <div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)">
-        <img src="img_w3slogo.gif" draggable="true" ondragstart="drag(event)" id="drag1" width="88" height="31">
+      <!-- IMAGES DIVS -->
+      <div id="div1" ondrop="dropSigmoid(event)" ondragover="allowDrop(event)">
+        <img src="images/sigmoid.png" draggable="true" ondragstart="drag(event)" id="drag1" width="100" height="100">
       </div>
-      <button onclick="addLayer()">Creation test click</button><br>
+      <div id="div1" ondrop="dropTanh(event)" ondragover="allowDrop(event)">
+        <img src="images/tanh.png" draggable="true" ondragstart="drag(event)" id="drag1" width="100" height="100">
+      </div>
+      <div id="div1" ondrop="dropSoftmax(event)" ondragover="allowDrop(event)">
+        <img src="images/softmax.png" draggable="true" ondragstart="drag(event)" id="drag1" width="100" height="100">
+      </div>
+      <div id="div1" ondrop="dropRelu(event)" ondragover="allowDrop(event)">
+        <img src="images/relu.png" draggable="true" ondragstart="drag(event)" id="drag1" width="100" height="100">
+      </div>
+      <div id="div1" ondrop="dropSoftplus(event)" ondragover="allowDrop(event)">
+        <img src="images/softplus.png" draggable="true" ondragstart="drag(event)" id="drag1" width="100" height="100">
+      </div>
+      
+      <button onclick="">Creation test click</button><br>
       <button onclick="outputCode()">Update test click</button>
     </div>
-    <div id="myDiagramDiv" class="splitter-center" ondrop="drop(event)" ondragover="allowDrop(event)" style="width:100%; height:100%;"></div>
+    <div id="myDiagramDiv" class="splitter-center" ondrop="dropSoftmax(event)" ondragover="allowDrop(event)" style="width:100%; height:100%;"></div>
     <div class="splitter-east">
       <textarea id="mySavedModel" style="width:100%;height:100%;"></textarea>
       <textarea id="codeOutput" style="width:100%;height:100%;"></textarea>
@@ -48,7 +62,7 @@
   $(function () {
       $("#sample").zinoSplitter({
           panes: [
-              {size: 320, collapsible: true, region: "west"}, 
+              {size: 120, collapsible: true, region: "west"}, 
               {size: 700, collapsible: false, region: "center"}, 
               {size: 325, collapsible: true, region: "east"}
           ]
@@ -80,4 +94,5 @@
 <script src="utils.js"></script>
 <script src="decoders.js"></script>
 <script src="stackers.js"></script>
+<script src="dragdropMaker.js"></script>
 </html>
