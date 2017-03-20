@@ -18,7 +18,18 @@ function outputCode(){
   codeOutput = jsonToKeras(stackerMLP(myDiagram.model));
   document.getElementById("codeOutput").value = codeOutput;
 }
-    
+
+function allowDrop(ev) {
+    ev.preventDefault();
+}
+
+function drag(ev) {
+    ev.dataTransfer.setData("text", ev.target.id);
+}
+
+function drop(ev) {
+  addLayer();
+}   
     
 /**
  * layerMaker: wraps around the data provided from a creation FORM
