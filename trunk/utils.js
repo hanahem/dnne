@@ -11,14 +11,6 @@ function addLayer() {
     lastKey++;
 }
 
-/**
- * outputCode : updates the code output (to test with a button)
- */
-function outputCode(){
-  codeOutput = jsonToKeras(stackerMLP(myDiagram.model));
-  document.getElementById("codeOutput").value = codeOutput;
-}
-
 function allowDrop(ev) {
     ev.preventDefault();
 }
@@ -29,7 +21,16 @@ function drag(ev) {
 
 function drop(ev) {
   addLayer();
-}   
+}
+
+/**
+ * outputCode : updates the code output (to test with a button)
+ */
+function outputCode(){
+  codeOutput = jsonToKeras(stackerMLP(myDiagram.model));
+  document.getElementById("codeOutput").value = codeOutput;
+}
+    
     
 /**
  * layerMaker: wraps around the data provided from a creation FORM
