@@ -32,23 +32,21 @@ function drag(ev) {
 //  DROP FUNCTIONS
 //==================
 
-function dropSoftmax(ev) {
-  addLayer("Dense", "80", "18", "200 300", "softmax");
-}
-
-function dropRelu(ev) {
-  addLayer("Dense", "80", "18", "200 300", "relu");
-}
-
-function dropTanh(ev) {
-  addLayer("Dense", "80", "18", "200 300", "tanh");
-}
-
-function dropSigmoid(ev) {
-  addLayer("Dense", "80", "18", "200 300", "sigmoid");
-}
-
-function dropSoftplus(ev) {
-  addLayer("Dense", "80", "18", "200 300", "softplus");
+function dropActivation(ev) {
+  if(ev.dataTransfer.getData("text") == "sigmoid"){
+    addLayer("Dense", "80", "18", "200 300", "sigmoid");
+  }
+  if(ev.dataTransfer.getData("text") == "tanh"){
+    addLayer("Dense", "80", "18", "200 300", "tanh");
+  }
+  if(ev.dataTransfer.getData("text") == "softmax"){
+    addLayer("Dense", "80", "18", "200 300", "softmax");
+  }
+  if(ev.dataTransfer.getData("text") == "relu"){
+    addLayer("Dense", "80", "18", "200 300", "relu");
+  }
+  if(ev.dataTransfer.getData("text") == "softplus"){
+    addLayer("Dense", "80", "18", "200 300", "softplus");
+  }
 }
 
