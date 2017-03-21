@@ -208,15 +208,15 @@
           linkFromPortIdProperty: "fromPort",
           linkToPortIdProperty: "toPort",
           nodeDataArray: [
-              { key: 1, name: "Server", inservices: [{ name: "i1" }, { name: "i2" }], outservices: [{ name: "o1" }, {name: "o2"}], loc: "0 0" },
-              { key: 2, name: "Other", inservices: [{ name: "i1" }, { name: "i2" }], loc: "200 60" },
-              
+              { key: 1, name: "sigmoid", outservices: [{name: "500"}], loc: "0 0" },
+              { key: 2, name: "tanh", inservices: [{ name: "500" }],  outservices: [{name: "300"}], loc: "230 60" },
+              { key: 3, name: "relu", inservices: [{ name: "300" }],  outservices: [{name: "10"}], loc: "360 80" },
+              { key: 4, name: "sigmoid", inservices: [{ name: "10" }], loc: "450 50" }
             ],
           linkDataArray: [
-              { from: 1, fromPort: "o1", to: 2, toPort: "i2" },
-              //{ from: 1, fromPort: "o1", to: 2, toPort: "s1" },
-              //{ from: 1, fromPort: "", to: 2, toPort: "s2" },
-              //{ from: 1, fromPort: "", to: 2, toPort: "s1" }
+              { from: 1, fromPort: "500", to: 2, toPort: "500" },
+              { from: 2, fromPort: "300", to: 3, toPort: "300" },
+              { from: 3, fromPort: "10", to: 4, toPort: "10" },
             ]
         });
 
