@@ -19,6 +19,7 @@
 <link rel="stylesheet" href="https://static.zinoui.com/1.5/themes/silver/zino.splitter.css">
 
 <style type="text/css">body{ font: normal 12px Arial, sans-serif;}</style>
+<link rel='stylesheet' href='style.css' />
 </head>
 
 <body onload="init()">
@@ -31,18 +32,51 @@
       <div>
         <img src="images/sigmoid.png" draggable="true" ondragstart="drag(event)" id="sigmoid" width="100" height="100">
       </div>
+      
+      <!-- Rounded switch -->
+      <label class="switch">
+        <input type="checkbox">
+        <div class="slider round"></div>
+      </label>
+      
       <div>
         <img src="images/tanh.png" draggable="true" ondragstart="drag(event)" id="tanh" width="100" height="100">
       </div>
+      
+      <!-- Rounded switch -->
+      <label class="switch">
+        <input type="checkbox">
+        <div class="slider round"></div>
+      </label>
+      
       <div>
         <img src="images/softmax.png" draggable="true" ondragstart="drag(event)" id="softmax" width="100" height="100">
       </div>
+      
+      <!-- Rounded switch -->
+      <label class="switch">
+        <input type="checkbox">
+        <div class="slider round"></div>
+      </label>
+      
       <div>
         <img src="images/relu.png" draggable="true" ondragstart="drag(event)" id="relu" width="100" height="100">
       </div>
       <div>
-        <img src="images/softplus.png" draggable="true" ondragstart="drag(event)" id="softplus" width="100" height="100">
+      
+      <!-- Rounded switch -->
+      <label class="switch">
+        <input type="checkbox">
+        <div class="slider round"></div>
+      </label>
+        <img src="images/softmax.png" draggable="true" ondragstart="drag(event)" id="softplus" width="100" height="100">
       </div>
+      
+      <!-- Rounded switch -->
+      <label class="switch">
+        <input type="checkbox">
+        <div class="slider round"></div>
+      </label>
       
       <button onclick="">Creation test click</button><br>
       <button onclick="outputCode()">Update test click</button>
