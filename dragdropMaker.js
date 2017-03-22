@@ -13,12 +13,28 @@ var lastKey = 3;
  * addLayer: adds a layer w.r.t. the parameters
  * IN: all Strings: the layer name, the input size, the output size, its location, its activation function
  **/
-
 function addLayer(layerName, input, output, location, activ) {
-    var elem = { key: lastKey, name: layerName, inservices: [{ name: input }], outservices : [{ name: output}], loc: location, activation:activ };
-    myDiagram.model.addNodeData(elem);
-    lastKey++;
+   if(isInputLayer(activ)){
+      var elem = { key: lastKey, name: activ, outservices : [{ name: output}], loc: location, layer:layerName };
+      myDiagram.model.addNodeData(elem);
+      lastKey++;
+    }
+    if(isOutputLayer(activ)){
+      var elem = { key: lastKey, name: activ, inservices: [{ name: input }], loc: location, layer:layerName };
+      myDiagram.model.addNodeData(elem);
+      lastKey++;
+    }
+    if(!isInputLayer(activ) && !isOutputLayer(activ)){
+      var elem = { key: lastKey, name: activ, inservices: [{ name: input }], outservices : [{ name: output}], loc: location, layer:layerName };
+      myDiagram.model.addNodeData(elem);
+      lastKey++;
+    }
+    
 }
+
+//==================
+//  DDROP FUNCTIONS
+//==================
 
 function allowDrop(ev) {
     ev.preventDefault();
@@ -27,10 +43,6 @@ function allowDrop(ev) {
 function drag(ev) {
     ev.dataTransfer.setData("text", ev.target.id);
 }
-
-//==================
-//  DROP FUNCTIONS
-//==================
 
 function dropActivation(ev) {
   if(ev.dataTransfer.getData("text") == "sigmoid"){
@@ -47,36 +59,5 @@ function dropActivation(ev) {
   }
   if(ev.dataTransfer.getData("text") == "softplus"){
     addLayer("Dense", "80", "18", "200 300", "softplus");
-  }
-}
-
-//=================
-// Checkboxes MAN
-//=================
-
-/**
- * this function checks the input elemnt by ID
- */
-function check(id) {
-    document.getElementById(id).checked = true;
-}
-
-/**
- * this function unchecks the input elemnt by ID
- */
-function uncheck(id) {
-    document.getElementById(id).checked = false;
-}
-
-/**
- * this function takes as input the checked element an unchecks all the others
- */
-function manageCheck(checkedId) {
-  var x = document.getElementsByClassName("inCheck");
-  var i;
-  for (i = 0; i < x.length; i++) {
-      if(x[i].id != checkedId){
-        uncheck(x[i].id);
-      }
   }
 }
