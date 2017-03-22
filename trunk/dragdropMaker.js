@@ -50,3 +50,33 @@ function dropActivation(ev) {
   }
 }
 
+//=================
+// Checkboxes MAN
+//=================
+
+/**
+ * this function checks the input elemnt by ID
+ */
+function check(id) {
+    document.getElementById(id).checked = true;
+}
+
+/**
+ * this function unchecks the input elemnt by ID
+ */
+function uncheck(id) {
+    document.getElementById(id).checked = false;
+}
+
+/**
+ * this function takes as input the checked element an unchecks all the others
+ */
+function manageCheck(checkedId) {
+  var x = document.getElementsByClassName("inCheck");
+  var i;
+  for (i = 0; i < x.length; i++) {
+      if(x[i].id != checkedId){
+        uncheck(x[i].id);
+      }
+  }
+}
