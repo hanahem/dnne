@@ -33,9 +33,9 @@
         <img src="images/sigmoid.png" draggable="true" ondragstart="drag(event)" id="sigmoid" width="100" height="100">
       </div>
       
-      <!-- Rounded switch -->
+      <!-- Sigmoid switch -->
       <label class="switch">
-        <input type="checkbox">
+        <input type="checkbox" id="sigmoidC" class="inCheck" onclick="manageCheck('sigmoidC');">
         <div class="slider round"></div>
       </label>
       
@@ -43,9 +43,9 @@
         <img src="images/tanh.png" draggable="true" ondragstart="drag(event)" id="tanh" width="100" height="100">
       </div>
       
-      <!-- Rounded switch -->
+      <!-- Tanh switch -->
       <label class="switch">
-        <input type="checkbox">
+        <input type="checkbox" id="tanhC" class="inCheck" onclick="manageCheck('tanhC');">
         <div class="slider round"></div>
       </label>
       
@@ -53,9 +53,9 @@
         <img src="images/softmax.png" draggable="true" ondragstart="drag(event)" id="softmax" width="100" height="100">
       </div>
       
-      <!-- Rounded switch -->
+      <!-- Softmax switch -->
       <label class="switch">
-        <input type="checkbox">
+        <input type="checkbox" id="softmaxC" class="inCheck" onclick="manageCheck('softmaxC');">
         <div class="slider round"></div>
       </label>
       
@@ -64,17 +64,17 @@
       </div>
       <div>
       
-      <!-- Rounded switch -->
+      <!-- Relu switch -->
       <label class="switch">
-        <input type="checkbox">
+        <input type="checkbox" id="reluC" class="inCheck" onclick="manageCheck('reluC');">
         <div class="slider round"></div>
       </label>
         <img src="images/softplus.png" draggable="true" ondragstart="drag(event)" id="softplus" width="100" height="100">
       </div>
       
-      <!-- Rounded switch -->
+      <!-- Softplus switch -->
       <label class="switch">
-        <input type="checkbox">
+        <input type="checkbox" id="softplusC" class="inCheck" onclick="manageCheck('softplusC');">
         <div class="slider round"></div>
       </label>
       
@@ -108,7 +108,7 @@
   #sample{
       height: 800px;
       width: 1335px; 
-      background-color: #957030;
+      background-color: #FFF;
   }
   .splitter-west{
       background-color: #FFF;
