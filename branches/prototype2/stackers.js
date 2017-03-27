@@ -25,7 +25,7 @@ function stackerMLP(model) {
   layerStack.push(nodes[1]);
   currentKey = 2;
   
-  //The stacker loope
+  //The stacker loop
   for (var i = 1; i < nodes.length; i++) {
     currentLayer = {};
     //find the previous key
