@@ -11,6 +11,18 @@ function addLayer() {
     lastKey++;
 }
 
+function allowDrop(ev) {
+    ev.preventDefault();
+}
+
+function drag(ev) {
+    ev.dataTransfer.setData("text", ev.target.id);
+}
+
+function drop(ev) {
+  addLayer();
+}
+
 /**
  * outputCode : updates the code output (to test with a button)
  */

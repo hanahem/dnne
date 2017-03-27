@@ -19,17 +19,95 @@
 <link rel="stylesheet" href="https://static.zinoui.com/1.5/themes/silver/zino.splitter.css">
 
 <style type="text/css">body{ font: normal 12px Arial, sans-serif;}</style>
+<link rel='stylesheet' href='style.css' />
 </head>
 
 <body onload="init()">
 
   <div id="sample">
 
+
     <div class="splitter-west">
-      <button onclick="addLayer()">Creation test click</button><br>
+      <!-- IMAGES DIVS -->
+      <div>
+        <img src="images/sigmoid.png" draggable="true" ondragstart="drag(event)" id="sigmoid" width="100" height="100">
+      </div>
+      
+      <!-- Sigmoid IN switch -->
+      <label class="switch">
+        <input type="checkbox" id="sigmoidI" class="inCheck" onclick="manageCheck('sigmoidI');">
+        <div class="slider round"></div>
+      </label>
+      <!-- Sigmoid OUT switch -->
+      <label class="switch">
+        <input type="checkbox" id="sigmoidO" class="outCheck" onclick="manageCheck('sigmoidO');">
+        <div class="slider2 round"></div>
+      </label>
+      
+      <div>
+        <img src="images/tanh.png" draggable="true" ondragstart="drag(event)" id="tanh" width="100" height="100">
+      </div>
+      
+      <!-- Tanh IN switch -->
+      <label class="switch">
+        <input type="checkbox" id="tanhI" class="inCheck" onclick="manageCheck('tanhI');">
+        <div class="slider round"></div>
+      </label>
+      <!-- Tanh OUT switch -->
+      <label class="switch">
+        <input type="checkbox" id="tanhO" class="outCheck" onclick="manageCheck('tanhO');">
+        <div class="slider2 round"></div>
+      </label>
+      
+      <div>
+        <img src="images/softmax.png" draggable="true" ondragstart="drag(event)" id="softmax" width="100" height="100">
+      </div>
+      
+      <!-- Softmax IN switch -->
+      <label class="switch">
+        <input type="checkbox" id="softmaxI" class="inCheck" onclick="manageCheck('softmaxI');">
+        <div class="slider round"></div>
+      </label>
+      <!-- Softmax OUT switch -->
+      <label class="switch">
+        <input type="checkbox" id="softmaxO" class="outCheck" onclick="manageCheck('softmaxO');">
+        <div class="slider2 round"></div>
+      </label>
+      
+      <div>
+        <img src="images/relu.png" draggable="true" ondragstart="drag(event)" id="relu" width="100" height="100">
+      </div>
+      <div>
+      
+      <!-- Relu IN switch -->
+      <label class="switch">
+        <input type="checkbox" id="reluI" class="inCheck" onclick="manageCheck('reluI');">
+        <div class="slider round"></div>
+      </label>
+      <!-- Relu OUT switch -->
+      <label class="switch">
+        <input type="checkbox" id="reluO" class="outCheck" onclick="manageCheck('reluO');">
+        <div class="slider2 round"></div>
+      </label>
+      
+        <img src="images/softplus.png" draggable="true" ondragstart="drag(event)" id="softplus" width="100" height="100">
+      </div>
+      
+      <!-- Softplus IN switch -->
+      <label class="switch">
+        <input type="checkbox" id="softplusI" class="inCheck" onclick="manageCheck('softplusI');">
+        <div class="slider round"></div>
+      </label>
+      <!-- Softplus OUT switch -->
+      <label class="switch">
+        <input type="checkbox" id="softplusO" class="outCheck" onclick="manageCheck('softplusO');">
+        <div class="slider2 round"></div>
+      </label>
+      
+      <button onclick="isInputLayer('softmax')">Test click</button><br>
       <button onclick="outputCode()">Update test click</button>
     </div>
-    <div id="myDiagramDiv" class="splitter-center" style="width:100%; height:100%;"></div>
+    <div id="myDiagramDiv" class="splitter-center" ondrop="dropActivation(event)" ondragover="allowDrop(event)" style="width:100%; height:100%;"></div>
     <div class="splitter-east">
       <textarea id="mySavedModel" style="width:100%;height:100%;"></textarea>
       <textarea id="codeOutput" style="width:100%;height:100%;"></textarea>
@@ -44,8 +122,8 @@
   $(function () {
       $("#sample").zinoSplitter({
           panes: [
-              {size: 320, collapsible: true, region: "west"}, 
-              {size: 700, collapsible: false, region: "center"}, 
+              {size: 120, collapsible: true, region: "west"}, 
+              {size: 900, collapsible: false, region: "center"}, 
               {size: 325, collapsible: true, region: "east"}
           ]
       });
@@ -56,7 +134,7 @@
   #sample{
       height: 800px;
       width: 1335px; 
-      background-color: #957030;
+      background-color: #FFF;
   }
   .splitter-west{
       background-color: #FFF;
@@ -76,4 +154,6 @@
 <script src="utils.js"></script>
 <script src="decoders.js"></script>
 <script src="stackers.js"></script>
+<script src="dragdropMaker.js"></script>
+<script src="checkboxManager.js"></script>
 </html>
