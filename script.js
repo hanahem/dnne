@@ -34,14 +34,14 @@
     //Item Template:Shape
     //==========================
     
-    function makeItemTemplate(leftside) {
+    /*function makeItemTemplate(leftside) {
       return $(go.Panel, "Auto",
           { margin: new go.Margin(1, 0) },  // some space between ports
           $(go.Shape,
             {
               name: "SHAPE",
               fill: UnselectedBrush, stroke: "gray",
-              geometryString: "F1 m 0,0 l 5,0 1,4 -1,4 -5,0 1,-4 -1,-4 z",
+              geometryString: "F1 m 0,0 l 5,0 1,0 -1,0 -5,0 1,-2 -1,0 z",
               spot1: new go.Spot(0, 0, 5, 1),  // keep the text inside the shape
               spot2: new go.Spot(1, 1, -5, 0),
               // some port-related properties
@@ -73,8 +73,8 @@
                 }
               }
             })
-        );
-    }
+        );*/
+    //}
     
     //==========================
     //Adding node template: Spot
@@ -91,8 +91,14 @@
         $(go.Panel, "Auto",
           { name: "BODY" },
           $(go.Shape, "RoundedRectangle",
-            { stroke: "grey", strokeWidth: 2, fill: "lightBlue" },
-            new go.Binding("stroke", "isSelected", function(b) { return b ? SelectedBrush : UnselectedBrush; }).ofObject()),
+            { stroke: "grey", strokeWidth: 2, fill: "lightBlue", portId: "", cursor: "pointer",
+            // the Shape is the port, not the whole Node
+            // allow all kinds of links from and to this port
+            fromLinkable: true, fromLinkableSelfNode: true, fromLinkableDuplicates: true,
+            toLinkable: true, toLinkableSelfNode: true, toLinkableDuplicates: true },
+            new go.Binding("stroke", "isSelected", function(b) { return b ? SelectedBrush : UnselectedBrush; }).ofObject(),
+             new go.Binding("fill", "color")),
+            
           $(go.Panel, "Vertical",
             { margin: 6 },
             $(go.TextBlock,
@@ -101,7 +107,7 @@
             $(go.Picture, "image", //add a "layer" image
               { width: 10, height: 50, margin: new go.Margin(0, 0) })
           )
-        ),
+        )/*,
         $(go.Panel, "Vertical",
           { name: "LEFTPORTS", alignment: new go.Spot(0, 0.5, 0, 7) },
           new go.Binding("itemArray", "inservices"),
@@ -111,7 +117,7 @@
           { name: "RIGHTPORTS", alignment: new go.Spot(1, 0.5, 0, 7) },
           new go.Binding("itemArray", "outservices"),
           { itemTemplate: makeItemTemplate(false) }
-        )
+        )*/
       );
     
     //==========================
@@ -122,7 +128,11 @@
       $(go.Link,
         { routing: go.Link.Orthogonal, corner: 10, toShortLength: -3 },
         { relinkableFrom: true, relinkableTo: true, reshapable: true, resegmentable: true },
-        $(go.Shape, { stroke: "gray", strokeWidth: 2.5 })
+        $(go.Shape, { stroke: "gray", strokeWidth: 2.5 },
+        new go.Binding("strokeWidth", "size")),
+        $(go.Shape,
+          { toArrow: "Standard", stroke: null }
+          )
       );
       
     
@@ -208,10 +218,10 @@
           linkFromPortIdProperty: "fromPort",
           linkToPortIdProperty: "toPort",
           nodeDataArray: [
-              { key: 1, name: "sigmoid", outservices: [{name: "500"}], loc: "0 0" },
-              { key: 2, name: "tanh", inservices: [{ name: "500" }],  outservices: [{name: "300"}], loc: "230 60" },
-              { key: 3, name: "relu", inservices: [{ name: "300" }],  outservices: [{name: "10"}], loc: "360 80" },
-              { key: 4, name: "sigmoid", inservices: [{ name: "10" }], loc: "450 50" }
+              { key: 1, name: "sigmoid", outservices: [{name: "500"}], loc: "0 0", layer:"Dense", isOutput:false, color:"white" },
+              { key: 2, name: "tanh", inservices: [{ name: "500" }],  outservices: [{name: "300"}], loc: "230 60", layer:"Dense", isOutput:false},
+              { key: 3, name: "relu", inservices: [{ name: "300" }],  outservices: [{name: "10"}], loc: "360 80", layer:"Dense", isOutput:false },
+              { key: 4, name: "sigmoid", inservices: [{ name: "10" }], loc: "450 50", layer:"Dense", isOutput:true }
             ],
           linkDataArray: [
               { from: 1, fromPort: "500", to: 2, toPort: "500" },
@@ -219,7 +229,7 @@
               { from: 3, fromPort: "10", to: 4, toPort: "10" },
             ]
         });
-
+        
     //=========================
     //   Creating the Grid
     //=========================
@@ -240,6 +250,5 @@
     function showModel() {
       document.getElementById("mySavedModel").value = myDiagram.model.toJson();
     }
-    
     
 }
