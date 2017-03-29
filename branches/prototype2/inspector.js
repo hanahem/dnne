@@ -50,6 +50,10 @@ function showArrowInfo(e, obj) {
     var objectType = msg.split("/")[0]; //splits the formatted string and takes the 1st element which is the object type (link or node)
     //======WHEN NODE=======
     if(objectType == "node") {
+      //Display only the Node Inspector DIV
+      document.getElementById("inspectorNode").style.display = "block";
+      document.getElementById("inspectorLink").style.display = "none";
+      
       var node = msg.split("/"); //node here would be an array of this form ["node", key, activation, input, output, type, color]
       //GET ALL THE INPUT ELEMENTS
       var layerType = document.getElementById("inspectLayerType");
@@ -69,7 +73,25 @@ function showArrowInfo(e, obj) {
     }
     //======WHEN LINK=======
     else if(objectType == "link") {
+      //Display only the Link Inspector DIV
+      document.getElementById("inspectorNode").style.display = "none";
+      document.getElementById("inspectorLink").style.display = "block";
+      
       var link = msg.split("/"); //link here would be an array of this form ["link", from, fromPort, to, toPort]
+      //GET ALL THE INPUT ELEMENTS
+      var from = document.getElementById("inspectorFrom");
+      var to = document.getElementById("inspectorTo");
+      var inSize = document.getElementById("inspectorInSize");
+      var outSize = document.getElementById("inspectorOutSize");
+      
+      //ASSIGN EACH VALUE
+      from.value = link[1];
+      inSize.value = link[2];
+      to.value = link[3];
+      outSize.value = link[4];
+    }
+    else {
+      console.log("error on showArrowInfo");
     }
   }
 }

@@ -61,26 +61,37 @@
     </div>
     <div id="myDiagramDiv" class="splitter-center" ondrop="dropActivation(event)" ondragover="allowDrop(event)" style="width:100%; height:100%;"></div>
     <div class="splitter-east">
+      
+      <!-- NODE INSPCTOR DIV -->
       <div id="inspectorNode" style="display:block;">
-        Layer type:
-        <input id="inspectLayerType" value="dense"/><br>
-        Activation
-        <select id="inspectActiv" name="select">
+        <label for="inspectLayerType">Layer type</label>
+        <input class="enjoy-css" id="inspectLayerType" value="Dense" readonly/><br>
+        <label for="inspectActiv">Activation</label>
+        <select class="enjoy-css" id="inspectActiv" name="select">
           <option value="sigmoid">sigmoid</option> 
           <option value="relu" selected>relu</option>
           <option value="tanh">tanh</option>
         </select><br>
-        Input
-        <input id="inspectInput" type="number" value="18">
-        Output
-        <input id="inspectOutput" type="number" value="18"><br>
-        Layer color
-        <input id="inspectColor" type="color"/>
-        <input type="number" id="inspectKey" readonly value=""/>
+        <label for="inspectInput">Input</label>
+        <input class="enjoy-css" id="inspectInput" type="number" value="18"><br>
+        <label for="inspectOutput">Output</label>
+        <input class="enjoy-css" id="inspectOutput" type="number" value="18"><br>
+        <label for="inspectColor">Layer color</label>
+        <input class="enjoy-css" id="inspectColor" type="color"/>
+        <label for="inspectinspectKey">Key</label>
+        <input class="enjoy-css" type="number" id="inspectKey" readonly value=""/>
       </div>
       
+      <!-- LINK INSPCTOR DIV -->
       <div id="inspectorLink" style="display:none;">
-      <input value="heybitch"/>
+        <label for="inspectFrom">From Layer</label>
+        <input class="enjoy-css" id="inspectorFrom" value=""/><br>
+        <label for="inspectInSize">Input size</label>
+        <input class="enjoy-css" id="inspectorInSize" value=""/><br>
+        <label for="inspectTo">To Layer</label>
+        <input class="enjoy-css" id="inspectorTo" value=""/><br>
+        <label for="inspectOutSize">Output size</label>
+        <input class="enjoy-css" id="inspectorOutSize" value=""/>
       </div>
     
       <textarea id="mySavedModel" style="width:100%;height:100%;"></textarea>
