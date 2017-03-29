@@ -1,0 +1,7 @@
+TODO: 
+finish inspector
+add rightclick features
+clear test buttons
+check encoder
+restyle the hole
+add utils
