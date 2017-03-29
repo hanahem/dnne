@@ -1,4 +1,5 @@
 TODO: 
+!!!!recheck dragdrop
 finish inspector
 add rightclick features
 clear test buttons
