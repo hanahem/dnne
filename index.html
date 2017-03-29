@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html ng-app="dnne">
+
+  <head>
+
+    <script>document.write('<base href="' + document.location + '" />');</script>
+    <script data-require="angular.js@1.5.x" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.11/angular.min.js" data-semver="1.5.11"></script>
+    <script src="app.js"></script>
+    
+    
+    
+<title>Deep Neural Net Editor</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+<!-- GoJS & JQuery imports -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gojs/1.7.3/go.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<!-- Zino UI imports-->
+<script src="https://static.zinoui.com/1.5/compiled/zino.position.min.js"></script>
+<script src="https://static.zinoui.com/1.5/compiled/zino.draggable.min.js"></script>
+<script src="https://static.zinoui.com/1.5/compiled/zino.splitter.min.js"></script>
+<script src="https://static.zinoui.com/js/front.min.js"></script>
+<link rel="stylesheet" href="https://static.zinoui.com/1.5/themes/silver/zino.core.css">
+<link rel="stylesheet" href="https://static.zinoui.com/1.5/themes/silver/zino.splitter.css">
+
+<style type="text/css">body{ font: normal 12px Arial, sans-serif;}</style>
+<link rel='stylesheet' href='style.css' />
+</head>
+
+<body onload="init()">
+
+  <div id="sample">
+
+
+    <div class="splitter-west">
+      <!-- IMAGES DIVS -->
+      <div>
+        <img src="images/sigmoid.png" draggable="true" ondragstart="drag(event)" id="sigmoid" width="100" height="100">
+      </div>
+      <div>
+        <img src="images/tanh.png" draggable="true" ondragstart="drag(event)" id="tanh" width="100" height="100">
+      </div>
+      <div>
+        <img src="images/softmax.png" draggable="true" ondragstart="drag(event)" id="softmax" width="100" height="100">
+      </div>
+      <div>
+        <img src="images/relu.png" draggable="true" ondragstart="drag(event)" id="relu" width="100" height="100">
+      </div>
+      <div>
+        <img src="images/softplus.png" draggable="true" ondragstart="drag(event)" id="softplus" width="100" height="100">
+      </div>
+      
+      <button onclick="isInputLayer('softmax')">Test click</button><br>
+      <button onclick="outputCode()">Update test click</button>
+      <button onclick="visibChange()">Update visibli test</button>
+      <div id="myArrowheadInfo" style="color:red"></div>
+      <input id="someInput" value=""/>
+    </div>
+    <div id="myDiagramDiv" class="splitter-center" ondrop="dropActivation(event)" ondragover="allowDrop(event)" style="width:100%; height:100%;"></div>
+    <div class="splitter-east">
+      <div id="inspectorNode" style="display:block;">
+        Layer type:
+        <input id="inspectLayerType" value="dense"/><br>
+        Activation
+        <select id="inspectActiv" name="select">
+          <option value="sigmoid">sigmoid</option> 
+          <option value="relu" selected>relu</option>
+          <option value="tanh">tanh</option>
+        </select><br>
+        Input
+        <input id="inspectInput" type="number" value="18">
+        Output
+        <input id="inspectOutput" type="number" value="18"><br>
+        Layer color
+        <input id="inspectColor" type="color"/>
+        <input type="number" id="inspectKey" readonly value=""/>
+      </div>
+      
+      <div id="inspectorLink" style="display:none;">
+      <input value="heybitch"/>
+      </div>
+    
+      <textarea id="mySavedModel" style="width:100%;height:100%;"></textarea>
+      <textarea id="codeOutput" style="width:100%;height:100%;"></textarea>
+    </div>
+    
+    
+  </div>
+  
+
+<!-- Splitter Script and Style -->
+  
+  <script type="text/javascript">
+  $(function () {
+      $("#sample").zinoSplitter({
+          panes: [
+              {size: 120, collapsible: true, region: "west"}, 
+              {size: 900, collapsible: false, region: "center"}, 
+              {size: 325, collapsible: true, region: "east"}
+          ]
+      });
+  });
+  </script>
+  
+  <style type="text/css">
+  #sample{
+      height: 800px;
+      width: 100%; 
+      background-color: #FFF;
+  }
+  .splitter-west{
+      background-color: #FFF;
+  }
+  .splitter-center{
+      background-color: #FFF;
+  }
+  .splitter-east{
+      background-color: #FFF;
+  }
+  </style>  
+
+</body>
+
+<!-- JS scripts calls -->
+<script src="script.js"></script>
+<script src="utils.js"></script>
+<script src="decoders.js"></script>
+<script src="stackers.js"></script>
+<script src="dragdropMaker.js"></script>
+<script src="inspector.js"></script>
+</html>
