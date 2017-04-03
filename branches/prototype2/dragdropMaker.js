@@ -21,7 +21,7 @@ function addLayer(layerName, input, output, location, activ) {
 }
 
 //==================
-//  DDROP FUNCTIONS
+//  DROP FUNCTIONS
 //==================
 /**
  * this function takes an event as input and makes it droppable
@@ -40,20 +40,21 @@ function drag(ev) {
 /**
  * this functions adds a layer w.r.t. the id's name, which is the activation type name
  */
-function dropActivation(ev) {
+function dropActivation(ev,NDA) {
+  var newPosStr = generateNewPosition(NDA);
   if(ev.dataTransfer.getData("text") == "sigmoid"){
-    addLayer("Dense", "80", "18", "200 300", "sigmoid");
+    addLayer("Dense", "80", "18", newPosStr, "sigmoid");
   }
   if(ev.dataTransfer.getData("text") == "tanh"){
-    addLayer("Dense", "80", "18", "200 300", "tanh");
+    addLayer("Dense", "80", "18", newPosStr, "tanh");
   }
   if(ev.dataTransfer.getData("text") == "softmax"){
-    addLayer("Dense", "80", "18", "200 300", "softmax");
+    addLayer("Dense", "80", "18", newPosStr, "softmax");
   }
   if(ev.dataTransfer.getData("text") == "relu"){
-    addLayer("Dense", "80", "18", "200 300", "relu");
+    addLayer("Dense", "80", "18", newPosStr, "relu");
   }
   if(ev.dataTransfer.getData("text") == "softplus"){
-    addLayer("Dense", "80", "18", "200 300", "softplus");
+    addLayer("Dense", "80", "18", newPosStr, "softplus");
   }
 }
