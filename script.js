@@ -26,7 +26,7 @@
           "undoManager.isEnabled": true
         });
 
-    var UnselectedBrush = "#0d75fb";  // item appearance, if not "selected"
+    var UnselectedBrush = "dodgerblue";  // item appearance, if not "selected"
     var SelectedBrush = "#ff447f";   // item appearance, if "selected"
     
     
@@ -34,14 +34,14 @@
     //Item Template:Shape
     //==========================
     
-    /*function makeItemTemplate(leftside) {
+    function makeItemTemplate(leftside) {
       return $(go.Panel, "Auto",
           { margin: new go.Margin(1, 0) },  // some space between ports
           $(go.Shape,
             {
               name: "SHAPE",
               fill: UnselectedBrush, stroke: "gray",
-              geometryString: "F1 m 0,0 l 5,0 1,0 -1,0 -5,0 1,-2 -1,0 z",
+              geometryString: "F1 m 0,0 l 5,0 1,4 -1,4 -5,0 1,-4 -1,-4 z",
               spot1: new go.Spot(0, 0, 5, 1),  // keep the text inside the shape
               spot2: new go.Spot(1, 1, -5, 0),
               // some port-related properties
@@ -73,8 +73,8 @@
                 }
               }
             })
-        );*/
-    //}
+        );
+    }
     
     //==========================
     //Adding node template: Spot
@@ -91,21 +91,8 @@
         $(go.Panel, "Auto",
           { name: "BODY" },
           $(go.Shape, "RoundedRectangle",
-            { stroke: "grey", strokeWidth: 2, fill: "lightBlue", portId: "", cursor: "pointer",
-            // the Shape is the port, not the whole Node
-            // allow all kinds of links from and to this port
-            fromLinkable: true, fromLinkableSelfNode: true, fromLinkableDuplicates: true,
-            toLinkable: true, toLinkableSelfNode: true, toLinkableDuplicates: true },
-            new go.Binding("stroke", "isSelected", function(b) { return b ? SelectedBrush : UnselectedBrush; }).ofObject(),
-            new go.Binding("fill", "color")),
-            {click: showArrowInfo,  // defined in utils.js
-            toolTip:  // define a tooltip for each link that displays its information
-              $(go.Adornment, "Auto",
-                $(go.Shape, { fill: "#EFEFCC" }),
-                $(go.TextBlock, { margin: 4 },
-                  new go.Binding("text", "", infoString).ofObject())
-            )},
-            
+            { stroke: "grey", strokeWidth: 2, fill: "lightBlue" },
+            new go.Binding("stroke", "isSelected", function(b) { return b ? SelectedBrush : UnselectedBrush; }).ofObject()),
           $(go.Panel, "Vertical",
             { margin: 6 },
             $(go.TextBlock,
@@ -114,7 +101,7 @@
             $(go.Picture, "image", //add a "layer" image
               { width: 10, height: 50, margin: new go.Margin(0, 0) })
           )
-        )/*,
+        ),
         $(go.Panel, "Vertical",
           { name: "LEFTPORTS", alignment: new go.Spot(0, 0.5, 0, 7) },
           new go.Binding("itemArray", "inservices"),
@@ -124,7 +111,7 @@
           { name: "RIGHTPORTS", alignment: new go.Spot(1, 0.5, 0, 7) },
           new go.Binding("itemArray", "outservices"),
           { itemTemplate: makeItemTemplate(false) }
-        )*/
+        )
       );
     
     //==========================
@@ -135,20 +122,7 @@
       $(go.Link,
         { routing: go.Link.Orthogonal, corner: 10, toShortLength: -3 },
         { relinkableFrom: true, relinkableTo: true, reshapable: true, resegmentable: true },
-        $(go.Shape, { stroke: "gray", strokeWidth: 2.5 },
-        new go.Binding("strokeWidth", "size")),
-        $(go.Shape,
-          { toArrow: "Standard", stroke: null }
-          ),
-        {
-          click: showArrowInfo,
-          toolTip:  // define a tooltip for each link that displays its information
-              $(go.Adornment, "Auto",
-                $(go.Shape, { fill: "#EFEFCC" }),
-                $(go.TextBlock, { margin: 4 },
-                  new go.Binding("text", "", infoString).ofObject())
-              )
-        }
+        $(go.Shape, { stroke: "gray", strokeWidth: 2.5 })
       );
       
     
@@ -225,7 +199,7 @@
     //======================
     // Creating the model
     //======================
-    //the inOut property is set to 0 1 or 2 to say respectively : hidden layer, input layer or output layer
+
     myDiagram.model =
       $(go.GraphLinksModel,
         {
@@ -234,18 +208,27 @@
           linkFromPortIdProperty: "fromPort",
           linkToPortIdProperty: "toPort",
           nodeDataArray: [
-              { key: 1, name: "sigmoid", outservices: [{name: "500"}], loc: "0 0", layer:"Dense", inOut:1, color:"#ffc86f" },
-              { key: 2, name: "tanh", inservices: [{ name: "500" }],  outservices: [{name: "300"}], loc: "230 60", layer:"Dense", inOut:0, color:"#549fff"},
-              { key: 3, name: "relu", inservices: [{ name: "300" }],  outservices: [{name: "10"}], loc: "360 80", layer:"Dense", inOut:0, color:"#549fff" },
-              { key: 4, name: "sigmoid", inservices: [{ name: "10" }], loc: "450 50", layer:"Dense", inOut:2, color:"#b3ff6f" }
+              { key: 1, 
+				name: "Server", 
+				inservices: [{ name: "i1" }, { name: "i2" }], 
+				outservices: [{ name: "o1" }, {name: "o2"}], 
+				loc: "0 0" 
+			  },
+              { key: 2, 
+				name: "Other", 
+				inservices: [{ name: "i1" }, { name: "i2" }], 
+				loc: "200 60" 
+			  }
+              
             ],
           linkDataArray: [
-              { from: 1, fromPort: "500", to: 2, toPort: "500" },
-              { from: 2, fromPort: "300", to: 3, toPort: "300" },
-              { from: 3, fromPort: "10", to: 4, toPort: "10" },
+              { from: 1, fromPort: "o1", to: 2, toPort: "i2" },
+              //{ from: 1, fromPort: "o1", to: 2, toPort: "s1" },
+              //{ from: 1, fromPort: "", to: 2, toPort: "s2" },
+              //{ from: 1, fromPort: "", to: 2, toPort: "s1" }
             ]
         });
-        
+
     //=========================
     //   Creating the Grid
     //=========================
@@ -262,9 +245,15 @@
     //=========================
   
     showModel();
+    outputCode();
     
     function showModel() {
       document.getElementById("mySavedModel").value = myDiagram.model.toJson();
+    }
+    
+    function outputCode(){
+      codeOutput = jsonToKeras(stackerMLP(myDiagram.model));
+      document.getElementById("codeOutput").value = codeOutput;
     }
     
 }

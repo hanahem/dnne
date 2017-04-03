@@ -23,14 +23,30 @@ function layerMaker(type, nIn, nOut, link) {
 }
 
 /**
- * generateNewPosition: generates pseudo-random coordinates according to the former elements
+ * generateNewPosition: generates coordinates for a new layer according to the former elements in the model
+ * Input : NDA(object, myDiagram.model.nodeDataArray)
  * @return string: a position string as follows "x y", 
  * where x is the next free coordinate square in the canvas
  * and y is the average of the other elements' y coordinate
  * TODO: test-cases
  */
-function generateNewPosition() {
-   
+function generateNewPosition(NDA) {
+	var posXArr = [];
+	var posYArr = [];
+	for(var i=0; i < NDA.length; i++)
+	{
+		var splitStr = NDA[i].loc.split(" ");
+		posArrX.add(parseInt(splitStr[0]));
+		posArrY.add(parseInt(splitStr[1]));
+	}
+
+	var newX = Math.max.apply(Math, posArrX) + 100;
+
+	var newY = 0;
+	for(var i=0; i<posArrY.length; i++) newY += posArrY[i];
+	newY /= posArrY.length;
+
+	return newX + " " + newY;
 }
 
 /**
@@ -41,3 +57,6 @@ function generateNewPosition() {
 function zoom(value) {
   
 }
+
+
+
