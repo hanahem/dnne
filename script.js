@@ -26,7 +26,7 @@
           "undoManager.isEnabled": true
         });
 
-    var UnselectedBrush = "dodgerblue";  // item appearance, if not "selected"
+    var UnselectedBrush = "#0d75fb";  // item appearance, if not "selected"
     var SelectedBrush = "#ff447f";   // item appearance, if "selected"
     
     
@@ -94,10 +94,17 @@
             { stroke: "grey", strokeWidth: 2, fill: "lightBlue", portId: "", cursor: "pointer",
             // the Shape is the port, not the whole Node
             // allow all kinds of links from and to this port
-            fromLinkable: true, fromLinkableSelfNode: true, fromLinkableDuplicates: true,
-            toLinkable: true, toLinkableSelfNode: true, toLinkableDuplicates: true },
+            fromLinkable: true, fromLinkableSelfNode: false, fromLinkableDuplicates: true,
+            toLinkable: true, toLinkableSelfNode: false, toLinkableDuplicates: true },
             new go.Binding("stroke", "isSelected", function(b) { return b ? SelectedBrush : UnselectedBrush; }).ofObject(),
-             new go.Binding("fill", "color")),
+            new go.Binding("fill", "color")),
+            {click: showArrowInfo,  // defined in utils.js
+            toolTip:  // define a tooltip for each link that displays its information
+              $(go.Adornment, "Auto",
+                $(go.Shape, { fill: "#EFEFCC" }),
+                $(go.TextBlock, { margin: 4 },
+                  new go.Binding("text", "", infoString).ofObject())
+            )},
             
           $(go.Panel, "Vertical",
             { margin: 6 },
@@ -132,7 +139,16 @@
         new go.Binding("strokeWidth", "size")),
         $(go.Shape,
           { toArrow: "Standard", stroke: null }
-          )
+          ),
+        {
+          click: showArrowInfo,
+          toolTip:  // define a tooltip for each link that displays its information
+              $(go.Adornment, "Auto",
+                $(go.Shape, { fill: "#EFEFCC" }),
+                $(go.TextBlock, { margin: 4 },
+                  new go.Binding("text", "", infoString).ofObject())
+              )
+        }
       );
       
     
@@ -209,7 +225,7 @@
     //======================
     // Creating the model
     //======================
-
+    //the inOut property is set to 0 1 or 2 to say respectively : hidden layer, input layer or output layer
     myDiagram.model =
       $(go.GraphLinksModel,
         {
@@ -218,10 +234,10 @@
           linkFromPortIdProperty: "fromPort",
           linkToPortIdProperty: "toPort",
           nodeDataArray: [
-              { key: 1, name: "sigmoid", outservices: [{name: "500"}], loc: "0 0", layer:"Dense", isOutput:false, color:"white" },
-              { key: 2, name: "tanh", inservices: [{ name: "500" }],  outservices: [{name: "300"}], loc: "230 60", layer:"Dense", isOutput:false},
-              { key: 3, name: "relu", inservices: [{ name: "300" }],  outservices: [{name: "10"}], loc: "360 80", layer:"Dense", isOutput:false },
-              { key: 4, name: "sigmoid", inservices: [{ name: "10" }], loc: "450 50", layer:"Dense", isOutput:true }
+              { key: 1, name: "sigmoid",inservices: [{ name: "125" }], outservices: [{name: "500"}], loc: "0 0", layer:"Dense", inOut:1, color:"#ffc86f" },
+              { key: 2, name: "tanh", inservices: [{ name: "500" }],  outservices: [{name: "300"}], loc: "230 60", layer:"Dense", inOut:0, color:"#549fff"},
+              { key: 3, name: "relu", inservices: [{ name: "300" }],  outservices: [{name: "10"}], loc: "360 80", layer:"Dense", inOut:0, color:"#549fff" },
+              { key: 4, name: "sigmoid", inservices: [{ name: "10" }], loc: "450 50", layer:"Dense", inOut:2, color:"#b3ff6f" }
             ],
           linkDataArray: [
               { from: 1, fromPort: "500", to: 2, toPort: "500" },
@@ -249,6 +265,10 @@
     
     function showModel() {
       document.getElementById("mySavedModel").value = myDiagram.model.toJson();
+    }
+    
+    function getModel(){
+      return myDiagram.model.toJson();
     }
     
 }
