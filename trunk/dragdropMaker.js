@@ -1,9 +1,9 @@
 /**
  * This script contains the main functions to manage
  * the HTML drag and drop functionnality.
- * » for each layer type, there is a IMAGE tag in the index.html
+ * Â» for each layer type, there is a IMAGE tag in the index.html
  * when you drag any image, the html tag call one of the drop functions.
- * » each drop dunction calls the addLayer function with the needed parameters
+ * Â» each drop dunction calls the addLayer function with the needed parameters
  */
  
 //static variable for hidden layers' keys
@@ -14,21 +14,9 @@ var lastKey = 3;
  * IN: all Strings: the layer name, the input size, the output size, its location, its activation function
  **/
 function addLayer(layerName, input, output, location, activ) {
-   if(isInputLayer(activ)){ //if there is an element checked as input layer, create a layer that only has outservices
-      var elem = { key: lastKey, name: activ, outservices : [{ name: output}], loc: location, layer:layerName };
-      myDiagram.model.addNodeData(elem);
-      lastKey++;
-    }
-    if(isOutputLayer(activ)){ //if there is an element checked as output layer, create a layer that only has inservices
-      var elem = { key: lastKey, name: activ, inservices: [{ name: input }], loc: location, layer:layerName };
-      myDiagram.model.addNodeData(elem);
-      lastKey++;
-    }
-    if(!isInputLayer(activ) && !isOutputLayer(activ)){ //if there is no element checked as input layer nor output layer, create a layer that has outservices and inservices
-      var elem = { key: lastKey, name: activ, inservices: [{ name: input }], outservices : [{ name: output}], loc: location, layer:layerName };
-      myDiagram.model.addNodeData(elem);
-      lastKey++;
-    }
+    var elem = { key: lastKey, name: activ, inservices: [{ name: input }], outservices : [{ name: output}], loc: location, layer:layerName, inOut:2, color:"#549fff"  };
+    myDiagram.model.addNodeData(elem);
+    lastKey++;
     
 }
 

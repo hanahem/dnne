@@ -1,33 +1,8 @@
 /**
- * addLayer : adds a layer (to test with a button)
- **/
-//static variable for hidden layers' keys
-var lastKey = 3;
-function addLayer() {
-    var n = "hello";
-    var loca = "200 300";
-    var elem = { key: lastKey, name: n, inservices: [{ name: "s1" }], outservices : [{ name: "o1"}], loc: loca };
-    myDiagram.model.addNodeData(elem);
-    lastKey++;
-}
-
-function allowDrop(ev) {
-    ev.preventDefault();
-}
-
-function drag(ev) {
-    ev.dataTransfer.setData("text", ev.target.id);
-}
-
-function drop(ev) {
-  addLayer();
-}
-
-/**
  * outputCode : updates the code output (to test with a button)
  */
 function outputCode(){
-  codeOutput = jsonToKeras(stackerMLP(myDiagram.model));
+  codeOutput = decoderKeras(myDiagram.model);
   document.getElementById("codeOutput").value = codeOutput;
 }
     
@@ -66,4 +41,3 @@ function generateNewPosition() {
 function zoom(value) {
   
 }
-

@@ -10,29 +10,47 @@
  * jsonToKeras: encodes JSON to Keras syntax
  * IN: JSON-String model in stack
  * @return: stack list of strings (representing the command lines)
+ * TODO: add architecture checking
  */
-function jsonToKeras(layerStack) {
-  //TODO: architecture checking (1st case : MLP)
-  codeArray = [];
-  codeArray[0] = "from keras.models import Sequential";
-  codeArray[1] = "from keras.layers import Dense";
-  codeArray[2] = "import numpy";
-  codeArray[3] = "# create model";
-  codeArray[4] = "model = Sequential()";
-
-  //TODO: manage layers other than first, alone
-  for (var i = 0; i < layerStack.length; i++) {
-    codeLine = "";
-    currentLayer = layerStack[i];
-    codeLine = "model.add(" 
-              + currentLayer.name 
-              + "(" + currentLayer.outservices[0].name 
-              + ", activation = 'relu'))";
-    codeArray[i+5] = codeLine;
+function decoderKeras(model){
+  var code = "\
+ from keras.models import Sequential\n \
+from keras.layers import Dense\n \
+import numpy\n \
+# create model\n \
+model = Sequential() \n";
+  
+  var nodes = model.nodeDataArray;
+  var links = model.linkDataArray;
+  
+  for(var i=0; i<links.length; i++){
+    var currKey = links[i].from;
+    var foundKey = 0;
+    var currNode = {};
+    //Look for node for key == FROM
+    for (var j=0; nodes.length; j++){
+      if(nodes[j].key == currKey){
+        currNode = nodes[j];
+        console.log(currNode);
+        break;
+      }
+    }
+    code += " model.add(Dense(units="+ currNode.inservices[0].name+"))\
+\n model.add(Activation('"+ currNode.name +"'))\n";
   }
-
-  console.log(codeArray);
-  return codeArray;
+  //Look for node with key == TO
+  var currKeyTo = links[i-1].to;
+  var currNodeTo = {};
+  for (var k=0; nodes.length; k++){
+      if(nodes[k].key == currKeyTo){
+        currNodeTo = nodes[k];
+        break;
+      }
+  }
+  code += " model.add(Dense(units="+ currNodeTo.inservices[0].name +"))\
+\n model.add(Activation('"+ currNodeTo.name +"'))";
+  
+  return code;
   
 }
 
@@ -41,7 +59,7 @@ function jsonToKeras(layerStack) {
  * IN: JSON-String model in stack
  * @return: stack list of strings (representing the command lines)
  */
-function jsonToTflow(layerStack) {
+function decoderTflow(layerStack) {
 
 }
 
@@ -50,7 +68,7 @@ function jsonToTflow(layerStack) {
  * IN: JSON-String model in stack
  * @return: stack list of strings (representing the command lines)
  */
-function jsonToTheano(layerStack) {
+function decoderTheano(layerStack) {
 
 }
 
@@ -59,6 +77,6 @@ function jsonToTheano(layerStack) {
  * IN: JSON-String model in stack
  * @return: stack list of strings (representing the command lines)
  */
-function jsonToTorch(layerStack) {
+function decoderTorch(layerStack) {
 
 }
