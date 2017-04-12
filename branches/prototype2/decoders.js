@@ -44,6 +44,26 @@ function jsonToKeras(layerStack) {
  * @return: stack list of strings (representing the command lines)
  */
 function jsonToTflow(layerStack) {
+	//TODO architecture check
+	codeStrArr = [];
+	codeStrArr[0] = "import tensorflow as tf\n";
+	codeStrArr[1] = "sess = tf.InteractiveSession()";
+
+	//TODO: manage layers other than first, alone
+	for (var i = 0; i < layerStack.length; i++) {
+		codeLine = "";
+		currentLayer = layerStack[i];
+
+
+
+		codeLine = "model.add(" 
+							+ 'Dense' 
+							+ "(" + currentLayer.outservices[0].name 
+							+ ", activation = '"+
+							currentLayer.name+
+							"'))";
+		codeArray[i+5] = codeLine;
+	}
 
 }
 
@@ -53,7 +73,7 @@ function jsonToTflow(layerStack) {
  * @return: stack list of strings (representing the command lines)
  */
 function jsonToTheano(layerStack) {
-
+	
 }
 
 /**

@@ -30,7 +30,22 @@ function layerMaker(type, nIn, nOut, link) {
  * TODO: test-cases
  */
 function generateNewPosition() {
-   
+	var posXArr = [];
+	var posYArr = [];
+	for(var i=0; i < NDA.length; i++)
+	{
+		var splitStr = NDA[i].loc.split(" ");
+		posArrX.add(parseInt(splitStr[0]));
+		posArrY.add(parseInt(splitStr[1]));
+	}
+
+	var newX = Math.max.apply(Math, posArrX) + 100;
+
+	var newY = 0;
+	for(var i=0; i<posArrY.length; i++) newY += posArrY[i];
+	newY /= posArrY.length;
+
+	return newX + " " + newY;
 }
 
 /**
