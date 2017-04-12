@@ -252,6 +252,7 @@
     }
     
     function outputCode(){
+ 	  console.log("layerStack : " + stackerMLP(myDiagram.model));
       codeOutput = jsonToKeras(stackerMLP(myDiagram.model));
       document.getElementById("codeOutput").value = codeOutput;
     }
