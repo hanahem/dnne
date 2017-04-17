@@ -19,37 +19,41 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
 <!-- Zino UI imports-->
-<script src="https://static.zinoui.com/1.5/compiled/zino.position.min.js"></script>
+<!--<script src="https://static.zinoui.com/1.5/compiled/zino.position.min.js"></script>
 <script src="https://static.zinoui.com/1.5/compiled/zino.draggable.min.js"></script>
 <script src="https://static.zinoui.com/1.5/compiled/zino.splitter.min.js"></script>
 <script src="https://static.zinoui.com/js/front.min.js"></script>
 <link rel="stylesheet" href="https://static.zinoui.com/1.5/themes/silver/zino.core.css">
 <link rel="stylesheet" href="https://static.zinoui.com/1.5/themes/silver/zino.splitter.css">
+-->
 
-<style type="text/css">body{ font: normal 12px Arial, sans-serif;}</style>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="bulma.css">
+<link rel="stylesheet" href="https://raw.githubusercontent.com/jgthms/bulma/master/css/bulma.css.map">
+
 <link rel='stylesheet' href='style.css' />
 </head>
 
 <body onload="init()">
 
-  <div id="sample">
+  <div id="sample" class="tile is-ancestor">
 
 
-    <div class="splitter-west">
+    <div class="tile is-1 is-vertical is-parent box">
       <!-- IMAGES DIVS -->
-      <div>
+      <div class="is-child box">
         <img src="images/sigmoid.png" draggable="true" ondragstart="drag(event)" id="sigmoid" width="100" height="100">
       </div>
-      <div>
+      <div class="is-child box">
         <img src="images/tanh.png" draggable="true" ondragstart="drag(event)" id="tanh" width="100" height="100">
       </div>
-      <div>
+      <div class="is-child box">
         <img src="images/softmax.png" draggable="true" ondragstart="drag(event)" id="softmax" width="100" height="100">
       </div>
-      <div>
+      <div class="is-child box">
         <img src="images/relu.png" draggable="true" ondragstart="drag(event)" id="relu" width="100" height="100">
       </div>
-      <div>
+      <div class="is-child box">
         <img src="images/softplus.png" draggable="true" ondragstart="drag(event)" id="softplus" width="100" height="100">
       </div>
       
@@ -59,11 +63,15 @@
       <div id="myArrowheadInfo" style="color:red"></div>
       <input id="someInput" value=""/>
     </div>
-    <div id="myDiagramDiv" class="splitter-center" ondrop="dropActivation(event)" ondragover="allowDrop(event)" style="width:100%; height:100%;"></div>
-    <div class="splitter-east">
+    
+    <div class="tile is-9 box">
+    <div id="myDiagramDiv" ondrop="dropActivation(event)" ondragover="allowDrop(event)" style="width:100%; height:100%;"></div>
+    </div>
+    
+    <div class="tile is-vertical is-parent box">
       
       <!-- NODE INSPCTOR DIV -->
-      <div id="inspectorNode" style="display:block;">
+      <div id="inspectorNode" class="is-child box" style="display:block;">
         <label for="inspectLayerType">Layer type</label>
         <input class="enjoy-css" id="inspectLayerType" value="Dense" readonly/><br>
         <label for="inspectActiv">Activation</label>
@@ -85,7 +93,7 @@
       </div>
       
       <!-- LINK INSPCTOR DIV -->
-      <div id="inspectorLink" style="display:none;">
+      <div id="inspectorLink" class="is-child box" style="display:none;">
         <label for="inspectFrom">From Layer</label>
         <input class="enjoy-css" id="inspectorFrom" value=""/><br>
         <label for="inspectInSize">Input size</label>
@@ -96,44 +104,13 @@
         <input class="enjoy-css" id="inspectorOutSize" value=""/>
       </div>
     
-      <textarea id="mySavedModel" style="width:100%;height:100%;"></textarea>
-      <textarea id="codeOutput" style="width:100%;height:100%;"></textarea>
+      <textarea id="mySavedModel" class="is-child box" style="width:100%;height:100%;"></textarea>
+      <textarea id="codeOutput" class="is-child box" style="width:100%;height:100%;"></textarea>
     </div>
     
     
   </div>
-  
 
-<!-- Splitter Script and Style -->
-  
-  <script type="text/javascript">
-  $(function () {
-      $("#sample").zinoSplitter({
-          panes: [
-              {size: 120, collapsible: true, region: "west"}, 
-              {size: 900, collapsible: false, region: "center"}, 
-              {size: 325, collapsible: true, region: "east"}
-          ]
-      });
-  });
-  </script>
-  
-  <style type="text/css">
-  #sample{
-      height: 800px;
-      width: 100%; 
-      background-color: #FFF;
-  }
-  .splitter-west{
-      background-color: #FFF;
-  }
-  .splitter-center{
-      background-color: #FFF;
-  }
-  .splitter-east{
-      background-color: #FFF;
-  }
-  </style>  
 
 </body>
 
