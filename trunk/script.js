@@ -94,8 +94,8 @@
             { stroke: "grey", strokeWidth: 2, fill: "lightBlue", portId: "", cursor: "pointer",
             // the Shape is the port, not the whole Node
             // allow all kinds of links from and to this port
-            fromLinkable: true, fromLinkableSelfNode: false, fromLinkableDuplicates: true,
-            toLinkable: true, toLinkableSelfNode: false, toLinkableDuplicates: true },
+            fromLinkable: true, fromLinkableSelfNode: true, fromLinkableDuplicates: true,
+            toLinkable: true, toLinkableSelfNode: true, toLinkableDuplicates: true },
             new go.Binding("stroke", "isSelected", function(b) { return b ? SelectedBrush : UnselectedBrush; }).ofObject(),
             new go.Binding("fill", "color")),
             {click: showArrowInfo,  // defined in utils.js
@@ -234,7 +234,7 @@
           linkFromPortIdProperty: "fromPort",
           linkToPortIdProperty: "toPort",
           nodeDataArray: [
-              { key: 1, name: "sigmoid",inservices: [{ name: "125" }], outservices: [{name: "500"}], loc: "0 0", layer:"Dense", inOut:1, color:"#ffc86f" },
+              { key: 1, name: "sigmoid", outservices: [{name: "500"}], loc: "0 0", layer:"Dense", inOut:1, color:"#b3ff6f" },
               { key: 2, name: "tanh", inservices: [{ name: "500" }],  outservices: [{name: "300"}], loc: "230 60", layer:"Dense", inOut:0, color:"#549fff"},
               { key: 3, name: "relu", inservices: [{ name: "300" }],  outservices: [{name: "10"}], loc: "360 80", layer:"Dense", inOut:0, color:"#549fff" },
               { key: 4, name: "sigmoid", inservices: [{ name: "10" }], loc: "450 50", layer:"Dense", inOut:2, color:"#b3ff6f" }
@@ -242,7 +242,7 @@
           linkDataArray: [
               { from: 1, fromPort: "500", to: 2, toPort: "500" },
               { from: 2, fromPort: "300", to: 3, toPort: "300" },
-              { from: 3, fromPort: "10", to: 4, toPort: "10" }
+              { from: 3, fromPort: "10", to: 4, toPort: "10" },
             ]
         });
         
