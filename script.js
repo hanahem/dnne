@@ -94,8 +94,8 @@
             { stroke: "grey", strokeWidth: 2, fill: "lightBlue", portId: "", cursor: "pointer",
             // the Shape is the port, not the whole Node
             // allow all kinds of links from and to this port
-            fromLinkable: true, fromLinkableSelfNode: true, fromLinkableDuplicates: true,
-            toLinkable: true, toLinkableSelfNode: true, toLinkableDuplicates: true },
+            fromLinkable: true, fromLinkableSelfNode: false, fromLinkableDuplicates: true,
+            toLinkable: true, toLinkableSelfNode: false, toLinkableDuplicates: true },
             new go.Binding("stroke", "isSelected", function(b) { return b ? SelectedBrush : UnselectedBrush; }).ofObject(),
             new go.Binding("fill", "color")),
             {click: showArrowInfo,  // defined in utils.js
