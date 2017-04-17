@@ -36,8 +36,8 @@ function generateNewPosition() {
 	for(var i=0; i < nodes.length; i++)
 	{
 		var splitStr = nodes[i].loc.split(" ");
-		posArrX.push(parseInt(splitStr[0]));
-		posArrY.push(parseInt(splitStr[1]));
+		posArrX.push(parseInt(splitStr[0], 10));
+		posArrY.push(parseInt(splitStr[1], 10));
 	}
 
 	var newX = Math.max.apply(Math, posArrX) + 100;

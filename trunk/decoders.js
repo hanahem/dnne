@@ -178,7 +178,7 @@ model = Sequential() \n";
       }
     }
     code += " model.add(Dense(units="+ currNode.inservices[0].name+"))\
-\n model.add(Activation('"+ currNode.name +"'))\n";
+\n model.add(Activation('"+ currNode.name +"'))\n"; 
   }
   //Look for node with key == TO
   var currKeyTo = links[i-1].to;
@@ -204,8 +204,7 @@ model = Sequential() \n";
  */
 function decoderTflow(model) 
 {
-	code = "import tensorflow as tf\n \
-			sess = tf.InteractiveSession() \n \n";
+	var code = "import tensorflow as tf\n\n";
 
  	var nodes = model.nodeDataArray;
 	var links = model.linkDataArray;
@@ -216,16 +215,17 @@ function decoderTflow(model)
 	
 	for (var i=0; i < nodes.length; i++)
 	{
-		if 		(nodes[i].inOut === "2") outputLayer = nodes[i];
-		else if (nodes[i].inOut === "1") inputLayer = nodes[i];
-		else 							 hiddenLayers.push(nodes[i]);
+		if 		(nodes[i].inOut === 2) outputLayer = nodes[i];
+		else if (nodes[i].inOut === 1) inputLayer = nodes[i];
+		else 						   hiddenLayers.push(nodes[i]);
 	}
 
-	var inputSizeStr = inputLayer.inservices.name;
-	var outputSizeStr = outputLayer.inservices.name;
+	var inputSizeStr = inputLayer.inservices[0].name;
+	var outputSizeStr = outputLayer.inservices[0].name;
 
-	code += "x = tf.placeholder(tf.float32, shape=[None," + inputSizeStr + "]) \n \
-			 y_ = tf.placeholder(tf.float32, shape=[None," + outputSizeStr + "])";
+	code += "#placeholders act as a way to remember the size of the input value and the output value, respectively\n" +
+			 "x = tf.placeholder(tf.float32, shape=[None," + inputSizeStr + "]) \n" +
+			 "y_ = tf.placeholder(tf.float32, shape=[None," + outputSizeStr + "]) \n\n\n";
 
 	var linksTo = [];
 	var linksFr = [];
@@ -238,7 +238,7 @@ function decoderTflow(model)
 	var sortedLayers = [];
 	sortedLayers.push(inputLayer);
 
-	for (var i=0; i < hiddenLayers; i++) 
+	for (var i=0; i < hiddenLayers.length; i++) 
 	{
 		var currKey = sortedLayers[i].key;
 		var pos = linksFr.indexOf(currKey);
@@ -250,31 +250,36 @@ function decoderTflow(model)
 
 	sortedLayers.push(outputLayer);
 	
-	var neuronNbArr = []; //stocks the number of neuron per layer where index 0 is input layer
-	for (var i=0; i < sortedLayers; i++) neuronNbArr.push(parseInt(sortedLayers.inservices));
+	var neuronNbArr = []; //stocks the number of neurons per layer where index 0 is input layer
+	for (var i=0; i < sortedLayers.length; i++) neuronNbArr.push(parseInt(sortedLayers[i].inservices[0].name, 10));
 
 	//making an index of weight matrices
-	code += "weights = {\n"
+	code += "#weights of synapses between each layer stocked as a matrix\nweights = {\n";
 	for (var i=0; i < neuronNbArr.length - 1; i++)
 	{
 		code += "\t'W" + i + "': tf .Variable(tf.random_normal([" +
 				neuronNbArr[i] + "," + neuronNbArr[i+1]+ "]))";
-		if (i !== neuronNbArr.length - 2) code += ",\n";
-		else							  code += "\n}\n\n";
+		if (i !== neuronNbArr.length - 2) {code += ",\n";}
+		else							  {code += "\n}\n\n";}
 	}
 			 
 	//making an index of bias vectors
-	code += "biases = {\n"
+	code += "#biases of a neuron layer stocked as a vector\nbiases = {\n";
 	for (var i=1; i < neuronNbArr.length; i++)
 	{
 		code += "\t'b" + (i-1) + "': tf .Variable(tf.random_normal([" +
 				neuronNbArr[i] + "]))";
-		if (i !== neuronNbArr.length - 1) code += ",\n";
-		else							  code += "\n}\n\n";
+		if (i !== neuronNbArr.length - 1) {code += ",\n";}
+		else							  {code += "\n}\n\n";}
 	}
 
 	//constructing a function that will take both index and our placeholder x to give out the output of the network
-	code += "def multilayer_perceptron(x, weights, biases):";
+	code += "\"\"\"\nWe make our graph into a function that takes placeholder, weights and biases as input.\n" +
+			"The feedforward mechanism is classic: a layer is a vector, it passes through synapses by\n"+
+			"being multiplied by the weight matrix. Once at the next layer, the corresponding bias vector\n"+
+			"is added. Finally, the activation function is applied to each invidual coordinate.\n" +
+			"This repeats until the output layer is reached.\n\"\"\"\n\n" +
+			"def multilayer_perceptron(x, weights, biases):";
 
 	for (var i=0; i < neuronNbArr.length-1; i++)
 	{
@@ -282,18 +287,28 @@ function decoderTflow(model)
 		code += "\tlayer_" + i + " = tf.add(tf.matmul(";
 		if (i===0) code += "x,";
 		else 	   code += "layer_" + (i-1) + ",";
-		code += "weights['W" + i + "']), biases['b" + i + "]) \n";
+		code += "weights['W" + i + "']), biases['b" + i + "']) \n";
 		
 		//activation
+		//TODO, should the user be recommended to have the output layer be of linear activation ?
 		code += "\tlayer_" + i + " = tf.nn." + sortedLayers[i].name +
 				"(layer_" + i + ")\n";
 	}
-	code += "return layer_" + i + "\n\n";
+	code += "\treturn layer_" + (i-1) + "\n\n"; //i-1 because it's i === neuronNbArr.length that breaks the loop
 
 
-	code += "pred = multilayer_perceptron(x, weights, biases)";
-	code += "init = tf.global_variables_initializer()";
+	code += "#Construction of the model\npred = multilayer_perceptron(x, weights, biases)\n\n";
+	
+	code += "\"\"\"\nFollowing steps include:\n" +
+			"1) Defining loss function and optimizer\n"+
+			"2) Initializing global variables\n"+
+			"3) Running the training session with appropriate hyperparameters and datasets\n" +
+			"4) Testing the model and calculating its accuracy\n\"\"\"\n\n";		
+	
+	/*
+	code += "init = tf.global_variables_initializer()\n";
 	code += "with tf.Session() as sess:\n\tsess.run(init)\n";
+	*/
 
 	return code;
 }
