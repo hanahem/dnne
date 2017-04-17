@@ -47,7 +47,7 @@ function updatePorts(model)
 		if (links[i].fromPort !== links[i].toPort) 
 		{
 			alert("Conflict at link " + i + "; no link should have toPort and fromPort fields with different values" + 
-				"\nPlease resolve conflict by approriately changing layer inservice and outservice fields to fix code output");
+				"\nPlease resolve conflict by appropriately changing layer inservice and outservice fields to fix code output");
 		}
 	}
 }
@@ -81,13 +81,13 @@ function MLPCheck(model)
 	var outKey; //useful at the end
 	var inKey;  //useful at the end
 	
-	for (var i=0; i < nodes.length; i++)
+	for (i=0; i < nodes.length; i++)
 	{
-		if ((nodes[i].inOut === 2) && (eOut = true) ) {alert("Duplicate output layer"); return false;}
-		if ((nodes[i].inOut === 2) && (eOut = false)) {eOut = true; outKey = nodes[i].key;}
+		if ((nodes[i].inOut === 2) && (eOut === true) ) {alert("Duplicate output layer"); return false;}
+		if ((nodes[i].inOut === 2) && (eOut === false)) {eOut = true; outKey = nodes[i].key;}
 		
-		if ((nodes[i].inOut === 1) && (eIn = true) )  {alert("Duplicate input layer"); return false;}
-		if ((nodes[i].inOut === 1) && (eIn = false))  {eIn = true;	inKey = nodes[i].key;}
+		if ((nodes[i].inOut === 1) && (eIn === true) )  {alert("Duplicate input layer"); return false;}
+		if ((nodes[i].inOut === 1) && (eIn === false))  {eIn = true;	inKey = nodes[i].key;}
 	}
 
 	if(!(eOut && eIn)) {alert("Missing input or output layer"); return false;}
@@ -96,13 +96,13 @@ function MLPCheck(model)
 	var linksTo = [];
 	var linksFr = [];
 
-	for (var i=0; i < links.length; i++)
+	for (i=0; i < links.length; i++)
 	{
 		linksTo.push(links[i].to);
 		linksFr.push(links[i].from);
 	}
 
-	for (var i=0; i < links.length; i++)
+	for (i=0; i < links.length; i++)
 	{
 		for (var j=i+1; j < links.length; j++) //two by two comparison, any doubles signal an error
 		{
@@ -122,7 +122,7 @@ function MLPCheck(model)
 
 	var currNode = findInNodes(outKey, nodes); //backtrack from output layer
 
-	for (var i=0; i < nodes.length; i++)
+	for (i=0; i < nodes.length; i++)
 	{
 		var currKey = currNode.key;
 		var pos = linksTo.indexOf(currKey);
@@ -198,7 +198,7 @@ model = Sequential() \n";
 
 /**
  * decoderTflow: encodes model into Tensorflow syntax; only constructs computational graph
- * Supposes (in this version) that the model in input has been validated as an MLP
+ * Supposes (in this version) that the model in input has already been validated as an MLP
  * IN: model for ANN graph
  * OUT: A single string containing the TF code of the ANN graph; training and usage are TODO in future versions
  */
@@ -257,7 +257,7 @@ function decoderTflow(model)
 	code += "#weights of synapses between each layer stocked as a matrix\nweights = {\n";
 	for (var i=0; i < neuronNbArr.length - 1; i++)
 	{
-		code += "\t'W" + i + "': tf .Variable(tf.random_normal([" +
+		code += "    'W" + i + "': tf .Variable(tf.random_normal([" +
 				neuronNbArr[i] + "," + neuronNbArr[i+1]+ "]))";
 		if (i !== neuronNbArr.length - 2) {code += ",\n";}
 		else							  {code += "\n}\n\n";}
@@ -267,7 +267,7 @@ function decoderTflow(model)
 	code += "#biases of a neuron layer stocked as a vector\nbiases = {\n";
 	for (var i=1; i < neuronNbArr.length; i++)
 	{
-		code += "\t'b" + (i-1) + "': tf .Variable(tf.random_normal([" +
+		code += "    'b" + (i-1) + "': tf .Variable(tf.random_normal([" +
 				neuronNbArr[i] + "]))";
 		if (i !== neuronNbArr.length - 1) {code += ",\n";}
 		else							  {code += "\n}\n\n";}
@@ -284,22 +284,22 @@ function decoderTflow(model)
 	for (var i=0; i < neuronNbArr.length-1; i++)
 	{
 		//shape
-		code += "\tlayer_" + i + " = tf.add(tf.matmul(";
+		code += "    layer_" + i + " = tf.add(tf.matmul(";
 		if (i===0) code += "x,";
 		else 	   code += "layer_" + (i-1) + ",";
 		code += "weights['W" + i + "']), biases['b" + i + "']) \n";
 		
 		//activation
 		//TODO, should the user be recommended to have the output layer be of linear activation ?
-		code += "\tlayer_" + i + " = tf.nn." + sortedLayers[i].name +
+		code += "    layer_" + i + " = tf.nn." + sortedLayers[i].name +
 				"(layer_" + i + ")\n";
 	}
-	code += "\treturn layer_" + (i-1) + "\n\n"; //i-1 because it's i === neuronNbArr.length that breaks the loop
+	code += "    return layer_" + (i-1) + "\n\n"; //i-1 because it's i === neuronNbArr.length that breaks the loop
 
 
 	code += "#Construction of the model\npred = multilayer_perceptron(x, weights, biases)\n\n";
 	
-	code += "\"\"\"\nFollowing steps include:\n" +
+	code += "\"\"\"\nFollowing steps TODO in the code include:\n" +
 			"1) Defining loss function and optimizer\n"+
 			"2) Initializing global variables\n"+
 			"3) Running the training session with appropriate hyperparameters and datasets\n" +
@@ -307,7 +307,7 @@ function decoderTflow(model)
 	
 	/*
 	code += "init = tf.global_variables_initializer()\n";
-	code += "with tf.Session() as sess:\n\tsess.run(init)\n";
+	code += "with tf.Session() as sess:\n    sess.run(init)\n";
 	*/
 
 	return code;
