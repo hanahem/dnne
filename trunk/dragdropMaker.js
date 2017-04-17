@@ -13,7 +13,9 @@ var lastKey = 3;
  * addLayer: adds a layer w.r.t. the parameters
  * IN: all Strings: the layer name, the input size, the output size, its location, its activation function
  **/
-function addLayer(layerName, input, output, location, activ) {
+function addLayer(layerName, input, output, activ) {
+    var location = generateNewPosition();
+    alert(location);
     var elem = { key: lastKey, name: activ, inservices: [{ name: input }], outservices : [{ name: output}], loc: location, layer:layerName, inOut:2, color:"#549fff"  };
     myDiagram.model.addNodeData(elem);
     lastKey++;
@@ -42,18 +44,18 @@ function drag(ev) {
  */
 function dropActivation(ev) {
   if(ev.dataTransfer.getData("text") == "sigmoid"){
-    addLayer("Dense", "80", "18", "200 300", "sigmoid");
+    addLayer("Dense", "80", "18", "sigmoid");
   }
   if(ev.dataTransfer.getData("text") == "tanh"){
-    addLayer("Dense", "80", "18", "200 300", "tanh");
+    addLayer("Dense", "80", "18", "tanh");
   }
   if(ev.dataTransfer.getData("text") == "softmax"){
-    addLayer("Dense", "80", "18", "200 300", "softmax");
+    addLayer("Dense", "80", "18", "softmax");
   }
   if(ev.dataTransfer.getData("text") == "relu"){
-    addLayer("Dense", "80", "18", "200 300", "relu");
+    addLayer("Dense", "80", "18", "relu");
   }
   if(ev.dataTransfer.getData("text") == "softplus"){
-    addLayer("Dense", "80", "18", "200 300", "softplus");
+    addLayer("Dense", "80", "18", "softplus");
   }
 }
