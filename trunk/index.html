@@ -18,15 +18,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gojs/1.7.3/go.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 
-<!-- Zino UI imports-->
-<!--<script src="https://static.zinoui.com/1.5/compiled/zino.position.min.js"></script>
-<script src="https://static.zinoui.com/1.5/compiled/zino.draggable.min.js"></script>
-<script src="https://static.zinoui.com/1.5/compiled/zino.splitter.min.js"></script>
-<script src="https://static.zinoui.com/js/front.min.js"></script>
-<link rel="stylesheet" href="https://static.zinoui.com/1.5/themes/silver/zino.core.css">
-<link rel="stylesheet" href="https://static.zinoui.com/1.5/themes/silver/zino.splitter.css">
--->
-
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="bulma.css">
 <link rel="stylesheet" href="https://raw.githubusercontent.com/jgthms/bulma/master/css/bulma.css.map">
@@ -57,25 +48,25 @@
         <img src="images/softplus.png" draggable="true" ondragstart="drag(event)" id="softplus" width="100" height="100">
       </div>
       
-      <button onclick="isInputLayer('softmax')">Test click</button><br>
-      <button onclick="outputCode()">Update test click</button>
-      <button id="selectionButton" onclick="">Update visibli test</button>
+      <button class="button is-info is-outlined" onclick="isInputLayer('softmax')">Test</button><br>
+      <button class="button is-info is-outlined" onclick="outputCode()">Code</button>
+      <button class="button is-info is-outlined" id="selectionButton" onclick="">VIZ</button>
       <div id="myArrowheadInfo" style="color:red"></div>
       <input id="someInput" value=""/>
     </div>
     
-    <div class="tile is-9 box">
-    <div id="myDiagramDiv" ondrop="dropActivation(event)" ondragover="allowDrop(event)" style="width:100%; height:100%;"></div>
+    <div class="tile is-8 box">
+    <div id="myDiagramDiv" ondrop="dropActivation(event)" ondragover="allowDrop(event)" style="width:100%; height:100%; border:1px solid rgb(198, 198, 198);"></div>
     </div>
     
     <div class="tile is-vertical is-parent box">
       
       <!-- NODE INSPCTOR DIV -->
-      <div id="inspectorNode" class="is-child box" style="display:block;">
+      <div id="inspectorNode" class="tile is-child box" style="display:block;">
         <label for="inspectLayerType">Layer type</label>
-        <input class="enjoy-css" id="inspectLayerType" value="Dense" readonly/><br>
+        <input class="input is-small" id="inspectLayerType" value="Dense" readonly/><br>
         <label for="inspectActiv">Activation</label>
-        <select class="enjoy-css" id="inspectActiv" name="select">
+        <select class="select is-small" id="inspectActiv" name="select">
           <option value="sigmoid">sigmoid</option> 
           <option value="relu" selected>relu</option>
           <option value="tanh">tanh</option>
@@ -83,28 +74,28 @@
           <option value="softmax">softmax</option>
         </select><br>
         <label for="inspectInput">Input</label>
-        <input class="enjoy-css" id="inspectInput" type="number" value="18" onchange="updateInspector(this)"><br>
+        <input class="input is-small" id="inspectInput" type="number" value="18" onchange="updateInspector(this)"><br>
         <label for="inspectOutput">Output</label>
-        <input class="enjoy-css" id="inspectOutput" type="number" value="18"><br>
+        <input class="input is-small" id="inspectOutput" type="number" value="18"><br>
         <label for="inspectColor">Layer color</label>
-        <input class="enjoy-css" id="inspectColor" type="color"/>
+        <input class="input is-small" id="inspectColor" type="color"/>
         <label for="inspectinspectKey">Key</label>
-        <input class="enjoy-css" type="number" id="inspectKey" readonly />
+        <input class="input is-small" type="number" id="inspectKey" readonly />
       </div>
       
       <!-- LINK INSPCTOR DIV -->
       <div id="inspectorLink" class="is-child box" style="display:none;">
         <label for="inspectFrom">From Layer</label>
-        <input class="enjoy-css" id="inspectorFrom" value=""/><br>
+        <input class="input is-small" id="inspectorFrom" value=""/><br>
         <label for="inspectInSize">Input size</label>
-        <input class="enjoy-css" id="inspectorInSize" value=""/><br>
+        <input class="input is-small" id="inspectorInSize" value=""/><br>
         <label for="inspectTo">To Layer</label>
-        <input class="enjoy-css" id="inspectorTo" value=""/><br>
+        <input class="input is-small" id="inspectorTo" value=""/><br>
         <label for="inspectOutSize">Output size</label>
-        <input class="enjoy-css" id="inspectorOutSize" value=""/>
+        <input class="input is-small" id="inspectorOutSize" value=""/>
       </div>
     
-      <textarea id="mySavedModel" class="is-child box" style="width:100%;height:100%;"></textarea>
+      <textarea id="mySavedModel" class="is-child box" style="width:100%;height:100%;display:none;"></textarea>
       <textarea id="codeOutput" class="is-child box" style="width:100%;height:100%;"></textarea>
     </div>
     

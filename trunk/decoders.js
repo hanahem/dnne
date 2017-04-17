@@ -83,11 +83,11 @@ function MLPCheck(model)
 	
 	for (var i=0; i < nodes.length; i++)
 	{
-		if (nodes[i].inOut === 2 && eOut = true ) {alert("Duplicate output layer"); return false;}
-		if (nodes[i].inOut === 2 && eOut = false) {eOut = true; outKey = nodes[i].key;}
+		if ((nodes[i].inOut === 2) && (eOut = true) ) {alert("Duplicate output layer"); return false;}
+		if ((nodes[i].inOut === 2) && (eOut = false)) {eOut = true; outKey = nodes[i].key;}
 		
-		if (nodes[i].inOut === 1 && eIn = true )  {alert("Duplicate input layer"); return false;}
-		if (nodes[i].inOut === 1 && eIn = false)  {eIn = true;	inKey = nodes[i].key;}
+		if ((nodes[i].inOut === 1) && (eIn = true) )  {alert("Duplicate input layer"); return false;}
+		if ((nodes[i].inOut === 1) && (eIn = false))  {eIn = true;	inKey = nodes[i].key;}
 	}
 
 	if(!(eOut && eIn)) {alert("Missing input or output layer"); return false;}
@@ -177,7 +177,7 @@ model = Sequential() \n";
         break;
       }
     }
-    code += " model.add(Dense(units="+ currNode.inservices[0].name+"))\
+    code += " model.add(Dense(units="+ currNode.outservices[0].name+"))\
 \n model.add(Activation('"+ currNode.name +"'))\n"; 
   }
   //Look for node with key == TO
