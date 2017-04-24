@@ -28,7 +28,18 @@ function outputCodeTflow()
 	}
 	document.getElementById("codeOutput").value = codeOutput;
 }
-    
+
+/**
+ *Debug function simply replaces codeOutput with the model in JSON format
+ */
+
+function outputCodeDebug()
+{
+	var codeOutput = "//The following is the model as a JSON string for debugging\n\n";
+	codeOutput += myDiagram.model.toJSON();
+	document.getElementById("codeOutput").value = codeOutput;
+}    
+
 /**
  * layerMaker: wraps around the data provided from a creation FORM
  * Input: type(string, defining the layer's name)
