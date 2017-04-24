@@ -37,26 +37,28 @@ function testCase_MLPCheck()
 }
 
 //If making new string from copy paste, regex '\n' into '" + \n\t\t' then no regex of '" +' into '\n" +'
-//This test seems a bit artificial; it should somehow be tested in an interpreter
-function TFDecoder()
+//This test seems a bit artificial; it should somehow be tested in a Python interpreter
+//The most useful part of this test is that it has a small protocol at the end to see when
+//the strings start to differ
+function testCase_TFDecoder()
 {
 	console.log("TFDecoder :\n");
 	var str1 = "import tensorflow as tf\n\n" +
 		"#placeholders act as a way to remember the size of the input value and the output value, respectively\n" + 
-		"x = tf.placeholder(tf.float32, shape=[None,125]) \n" + 
-		"y_ = tf.placeholder(tf.float32, shape=[None,10]) \n" + 
+		"x = tf.placeholder(tf.float32, shape=[None,125])\n" + 
+		"y_ = tf.placeholder(tf.float32, shape=[None,10])\n" + 
 		"#weights of synapses between each layer stocked as a matrix\n" + 
 		"weights = {\n" + 
-		"    'W0': tf .Variable(tf.random_normal([125,500])),\n" + 
-		"    'W1': tf .Variable(tf.random_normal([500,300])),\n" + 
-		"    'W2': tf .Variable(tf.random_normal([300,10]))\n" + 
+		"    'W0': tf.Variable(tf.random_normal([125,500])),\n" + 
+		"    'W1': tf.Variable(tf.random_normal([500,300])),\n" + 
+		"    'W2': tf.Variable(tf.random_normal([300,10]))\n" + 
 		"}\n" + 
 		"\n" + 
 		"#biases of a neuron layer stocked as a vector\n" + 
 		"biases = {\n" + 
-		"    'b0': tf .Variable(tf.random_normal([500])),\n" + 
-		"    'b1': tf .Variable(tf.random_normal([300])),\n" + 
-		"    'b2': tf .Variable(tf.random_normal([10]))\n" + 
+		"    'b0': tf.Variable(tf.random_normal([500])),\n" + 
+		"    'b1': tf.Variable(tf.random_normal([300])),\n" + 
+		"    'b2': tf.Variable(tf.random_normal([10]))\n" + 
 		"}\n" + 
 		"\n" + 
 		"\"\"\"\n" + 
@@ -68,11 +70,11 @@ function TFDecoder()
 		"\"\"\"\n" + 
 		"\n" + 
 		"def multilayer_perceptron(x, weights, biases):\n" + 
-		"    layer_0 = tf.add(tf.matmul(x,weights['W0']), biases['b0']) \n" + 
+		"    layer_0 = tf.add(tf.matmul(x,weights['W0']), biases['b0'])\n" + 
 		"    layer_0 = tf.nn.sigmoid(layer_0)\n" + 
-		"    layer_1 = tf.add(tf.matmul(layer_0,weights['W1']), biases['b1']) \n" + 
+		"    layer_1 = tf.add(tf.matmul(layer_0,weights['W1']), biases['b1'])\n" + 
 		"    layer_1 = tf.nn.tanh(layer_1)\n" + 
-		"    layer_2 = tf.add(tf.matmul(layer_1,weights['W2']), biases['b2']) \n" + 
+		"    layer_2 = tf.add(tf.matmul(layer_1,weights['W2']), biases['b2'])\n" + 
 		"    layer_2 = tf.nn.relu(layer_2)\n" + 
 		"    return layer_2\n" + 
 		"\n" + 
@@ -87,7 +89,24 @@ function TFDecoder()
 		"4) Testing the model and calculating its accuracy\n" + 
 		"\"\"\"\n\n";
 
-	console.log("Example1 : Correct ? " + (str1 === decoderTflow(model1));
+    var str1_ = decoderTflow(model1);
+
+	console.log("Example1 TF : Correct ? " + (str1 === str1_));
+  
+	//finds the point where things start to differ 
+	if (str1 !== str1_) 
+	{
+		console.log("Finding the point when the strings start to differ:\n");
+		while (str1[0] === str1_[0])
+		{
+		    str1 = str1.substring(1,str1.length);
+		    str1_ = str1_.substring(1,str1_.length);
+		    if (str1[0] !== str1_[0]) console.log("First differing pair of characters: str1 = " + str1[0] + " ; str1_ = " + str1_[0]);
+		}
+		console.log(str1);
+		console.log("\n\n-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-\n\n");
+		console.log(str1_);
+	}
 }
 
 

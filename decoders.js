@@ -87,7 +87,7 @@ function MLPCheck(model)
 		if ((nodes[i].inOut === 2) && (eOut === false)) {eOut = true; outKey = nodes[i].key;}
 		
 		if ((nodes[i].inOut === 1) && (eIn === true) )  {alert("Duplicate input layer"); return false;}
-		if ((nodes[i].inOut === 1) && (eIn === false))  {eIn = true;	inKey = nodes[i].key;}
+		if ((nodes[i].inOut === 1) && (eIn === false))  {eIn  = true; inKey  = nodes[i].key;}
 	}
 
 	if(!(eOut && eIn)) {alert("Missing input or output layer"); return false;}
@@ -149,8 +149,8 @@ function MLPCheck(model)
  **/
 
 /**
- * jsonToKeras: encodes JSON to Keras syntax
- * IN: JSON-String model in stack
+ * decoderKeras: transforms model to Keras syntax
+ * IN: ANNmodel object
  * @return: stack list of strings (representing the command lines)
  * TODO: add architecture checking
  */
@@ -199,6 +199,7 @@ model = Sequential() \n";
 /**
  * decoderTflow: encodes model into Tensorflow syntax; only constructs computational graph
  * Supposes (in this version) that the model in input has already been validated as an MLP
+ * Always use four spaces rather than a tab \t to be sure it works in python
  * IN: model for ANN graph
  * OUT: A single string containing the TF code of the ANN graph; training and usage are TODO in future versions
  */
@@ -215,21 +216,21 @@ function decoderTflow(model)
 	
 	for (var i=0; i < nodes.length; i++)
 	{
-		if 		(nodes[i].inOut === 2) outputLayer = nodes[i];
+		if 	    (nodes[i].inOut === 2) outputLayer = nodes[i];
 		else if (nodes[i].inOut === 1) inputLayer = nodes[i];
-		else 						   hiddenLayers.push(nodes[i]);
+		else                           hiddenLayers.push(nodes[i]);
 	}
-
+  
 	var inputSizeStr = inputLayer.inservices[0].name;
 	var outputSizeStr = outputLayer.inservices[0].name;
 
 	code += "#placeholders act as a way to remember the size of the input value and the output value, respectively\n" +
-			 "x = tf.placeholder(tf.float32, shape=[None," + inputSizeStr + "]) \n" +
-			 "y_ = tf.placeholder(tf.float32, shape=[None," + outputSizeStr + "]) \n\n\n";
+			"x = tf.placeholder(tf.float32, shape=[None," + inputSizeStr + "])\n" +
+			"y_ = tf.placeholder(tf.float32, shape=[None," + outputSizeStr + "])\n";
 
 	var linksTo = [];
 	var linksFr = [];
-	for (var i=0; i < links.length; i++)
+	for (i=0; i < links.length; i++)
 	{
 		linksTo.push(links[i].to);
 		linksFr.push(links[i].from);
@@ -238,7 +239,7 @@ function decoderTflow(model)
 	var sortedLayers = [];
 	sortedLayers.push(inputLayer);
 
-	for (var i=0; i < hiddenLayers.length; i++) 
+	for (i=0; i < hiddenLayers.length; i++) 
 	{
 		var currKey = sortedLayers[i].key;
 		var pos = linksFr.indexOf(currKey);
@@ -249,15 +250,21 @@ function decoderTflow(model)
 	}
 
 	sortedLayers.push(outputLayer);
-	
+    console.log(sortedLayers);
+ 
 	var neuronNbArr = []; //stocks the number of neurons per layer where index 0 is input layer
-	for (var i=0; i < sortedLayers.length; i++) neuronNbArr.push(parseInt(sortedLayers[i].inservices[0].name, 10));
-
+	for (i=0; i < sortedLayers.length; i++) 
+    {
+      console.log(sortedLayers[i].inservices[0].name);
+      neuronNbArr.push(parseInt(sortedLayers[i].inservices[0].name, 10));
+    }
+  
+    console.log(neuronNbArr + "   " + neuronNbArr.length);
 	//making an index of weight matrices
 	code += "#weights of synapses between each layer stocked as a matrix\nweights = {\n";
-	for (var i=0; i < neuronNbArr.length - 1; i++)
+	for (i=0; i < neuronNbArr.length - 1; i++)
 	{
-		code += "    'W" + i + "': tf .Variable(tf.random_normal([" +
+		code += "    \'W" + i + "': tf.Variable(tf.random_normal([" +
 				neuronNbArr[i] + "," + neuronNbArr[i+1]+ "]))";
 		if (i !== neuronNbArr.length - 2) {code += ",\n";}
 		else							  {code += "\n}\n\n";}
@@ -265,31 +272,31 @@ function decoderTflow(model)
 			 
 	//making an index of bias vectors
 	code += "#biases of a neuron layer stocked as a vector\nbiases = {\n";
-	for (var i=1; i < neuronNbArr.length; i++)
+	for (i=1; i < neuronNbArr.length; i++)
 	{
-		code += "    'b" + (i-1) + "': tf .Variable(tf.random_normal([" +
+		code += "    \'b" + (i-1) + "': tf.Variable(tf.random_normal([" +
 				neuronNbArr[i] + "]))";
 		if (i !== neuronNbArr.length - 1) {code += ",\n";}
 		else							  {code += "\n}\n\n";}
 	}
 
 	//constructing a function that will take both index and our placeholder x to give out the output of the network
-	code += "\"\"\"\nWe make our graph into a function that takes placeholder, weights and biases as input.\n" +
+	code += '"""\nWe make our graph into a function that takes placeholder, weights and biases as input.\n' +
 			"The feedforward mechanism is classic: a layer is a vector, it passes through synapses by\n"+
 			"being multiplied by the weight matrix. Once at the next layer, the corresponding bias vector\n"+
 			"is added. Finally, the activation function is applied to each invidual coordinate.\n" +
-			"This repeats until the output layer is reached.\n\"\"\"\n\n" +
-			"def multilayer_perceptron(x, weights, biases):";
+			'This repeats until the output layer is reached.\n"""\n\n' +
+			"def multilayer_perceptron(x, weights, biases):\n";
 
-	for (var i=0; i < neuronNbArr.length-1; i++)
+	for (i=0; i < neuronNbArr.length-1; i++)
 	{
 		//shape
 		code += "    layer_" + i + " = tf.add(tf.matmul(";
-		if (i===0) code += "x,";
-		else 	   code += "layer_" + (i-1) + ",";
-		code += "weights['W" + i + "']), biases['b" + i + "']) \n";
+		if (i===0) {code += "x,";}
+		else 	   {code += "layer_" + (i-1) + ",";}
+		code += "weights['W" + i + "']), biases['b" + i + "'])\n";
 		
-		//activation
+		//activation, output layer has none
 		//TODO, should the user be recommended to have the output layer be of linear activation ?
 		code += "    layer_" + i + " = tf.nn." + sortedLayers[i].name +
 				"(layer_" + i + ")\n";
@@ -299,34 +306,30 @@ function decoderTflow(model)
 
 	code += "#Construction of the model\npred = multilayer_perceptron(x, weights, biases)\n\n";
 	
-	code += "\"\"\"\nFollowing steps TODO in the code include:\n" +
+
+    //TODO maybe provide a text framework for the with hyperparameters that are defined with "ENTER APPROPRIATE VALUE OF TYPE (#TYPE) HERE"; 
+	code += "\"\"\"\nFollowing steps include:\n" +
 			"1) Defining loss function and optimizer\n"+
 			"2) Initializing global variables\n"+
 			"3) Running the training session with appropriate hyperparameters and datasets\n" +
 			"4) Testing the model and calculating its accuracy\n\"\"\"\n\n";		
-	
-	/*
-	code += "init = tf.global_variables_initializer()\n";
-	code += "with tf.Session() as sess:\n    sess.run(init)\n";
-	*/
 
 	return code;
 }
-
 /**
- * jsonToTheano: encodes JSON to Theano syntax
- * IN: JSON-String model in stack
+ * decoderTheano: encodes JSON to Theano syntax
+ * IN: model
  * @return: stack list of strings (representing the command lines)
  */
-function decoderTheano(layerStack) {
+function decoderTheano(model) {
 
 }
 
 /**
- * jsonToTorch: encodes JSON to Torch syntax
- * IN: JSON-String model in stack
+ * decoderTorch: transforms  to Torch syntax
+ * IN: model object
  * @return: stack list of strings (representing the command lines)
  */
-function decoderTorch(layerStack) {
+function decoderTorch(decoder) {
 
 }
