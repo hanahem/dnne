@@ -46,7 +46,7 @@ function testCase_TFDecoder()
 	var str1 = "import tensorflow as tf\n\n" +
 		"#placeholders act as a way to remember the size of the input value and the output value, respectively\n" + 
 		"x = tf.placeholder(tf.float32, shape=[None,125])\n" + 
-		"y_ = tf.placeholder(tf.float32, shape=[None,10])\n" + 
+		"y_ = tf.placeholder(tf.float32, shape=[None,10])\n\n" + 
 		"#weights of synapses between each layer stocked as a matrix\n" + 
 		"weights = {\n" + 
 		"    'W0': tf.Variable(tf.random_normal([125,500])),\n" + 

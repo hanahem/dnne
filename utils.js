@@ -1,11 +1,33 @@
 /**
- * outputCode : updates the code output (to test with a button)
+ * outputCodeKeras : updates the code output ; function called by Keras button
  */
-function outputCode(){
-  codeOutput = decoderKeras(myDiagram.model);
-  document.getElementById("codeOutput").value = codeOutput;
+function outputCodeKeras() 
+{
+	var codeOutput = "#Keras: Model is not an MLP or code not updated";
+	if (MLPCheck(myDiagram.model))
+	{
+		codeOutput = "";
+		codeOutput += "#Keras code :\n\n";
+		codeOutput += decoderKeras(myDiagram.model);
+	}
+	document.getElementById("codeOutput").value = codeOutput;
 }
-    
+
+/**
+ * outputCodeTflow : updates the code output; function called by Tflow button
+ */    
+
+function outputCodeTflow()
+{
+	var codeOutput = "#TensorFlow: Model is not an MLP or code not updated";
+	if (MLPCheck(myDiagram.model))
+	{
+		codeOutput = "";
+		codeOutput += "#TensorFlow code :\n\n";
+		codeOutput += decoderTflow(myDiagram.model);
+	}
+	document.getElementById("codeOutput").value = codeOutput;
+}
     
 /**
  * layerMaker: wraps around the data provided from a creation FORM
