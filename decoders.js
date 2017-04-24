@@ -27,10 +27,10 @@ function findInNodes(key, nodeArr)
  * OUT: void (model is updated directly)
  * TODO: make an update ports button in index.html ? 
  */
-function updatePorts(model)
+function updatePorts()
 {
-	var nodes = model.nodeDataArray;
-	var links = model.linkDataArray;
+	var nodes = myDiagram.model.nodeDataArray;
+	var links = myDiagram.model.linkDataArray;
 
 	for (var i=0; i < links.length; i++)
 	{
@@ -40,15 +40,16 @@ function updatePorts(model)
 		var inNode = findInNodes(inKey, nodes);
 		var outNode = findInNodes(outKey, nodes);
 
-		links[i].fromPort = inNode.outservices.name; //TODO does this work, or should links[i] be replaced by model.linkDataArray[i] ?
-		links[i].toPort = outNode.inservices.name;		
+		myDiagram.model.linkDataArray[i].fromPort = inNode.outservices[0].name; //TODO does this work, or should links[i] be replaced by model.linkDataArray[i] ?
+		myDiagram.model.linkDataArray[i].toPort = outNode.inservices[0].name;		
 	}
 	for (var i=0; i < links.length; i++)
 	{
 		if (links[i].fromPort !== links[i].toPort) 
 		{
 			alert("Conflict at link " + i + "; no link should have toPort and fromPort fields with different values" + 
-				"\nPlease resolve conflict by appropriately changing layer inservice and outservice fields to fix code output");
+				"\nPlease resolve conflict by appropriately changing layer inservice and outservice fields to fix code output" +
+				"\nPlease retry to update ports after this correction, as other mistakes may be found");
 		}
 	}
 }
@@ -69,10 +70,15 @@ function MLPCheck(model)
 	//check for conflict in links
 	for (var i=0; i < links.length; i++)
 	{
+		if (links[i].fromPort === "" || links[i].toPort === "")
+		{
+			alert("Some port fields are empty within the links, this might lead to incoherences\nTry fixing this by clicking on Ports");
+		}
 		if (links[i].fromPort !== links[i].toPort) 
 		{
 			alert("Conflict at link " + i + 
 				"\nPlease resolve to fix code output");
+			return false;
 		}
 	}
 
@@ -232,7 +238,7 @@ function decoderTflow(model)
 	
 	for (var i=0; i < nodes.length; i++)
 	{
-		if 	    (nodes[i].inOut === 2) {outputLayer = nodes[i];}
+		if      (nodes[i].inOut === 2) {outputLayer = nodes[i];}
 		else if (nodes[i].inOut === 1) {inputLayer = nodes[i];}
 		else                           {hiddenLayers.push(nodes[i]);}
 	}
@@ -301,7 +307,7 @@ function decoderTflow(model)
 	code += '"""\nWe make our graph into a function that takes placeholder, weights and biases as input.\n' +
 			"The feedforward mechanism is classic: a layer is a vector, it passes through synapses by\n"+
 			"being multiplied by the weight matrix. Once at the next layer, the corresponding bias vector\n"+
-			"is added. Finally, the activation function is applied to each invidual coordinate.\n" +
+			"is added. Finally, the activation function is applied to each individual coordinate.\n" +
 			'This repeats until the output layer is reached.\n"""\n\n' +
 			"def multilayer_perceptron(x, weights, biases):\n";
 

@@ -65,7 +65,7 @@ function testCase_TFDecoder()
 		"We make our graph into a function that takes placeholder, weights and biases as input.\n" + 
 		"The feedforward mechanism is classic: a layer is a vector, it passes through synapses by\n" + 
 		"being multiplied by the weight matrix. Once at the next layer, the corresponding bias vector\n" + 
-		"is added. Finally, the activation function is applied to each invidual coordinate.\n" + 
+		"is added. Finally, the activation function is applied to each individual coordinate.\n" + 
 		"This repeats until the output layer is reached.\n" + 
 		"\"\"\"\n" + 
 		"\n" + 
