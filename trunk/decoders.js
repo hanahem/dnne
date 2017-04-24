@@ -25,6 +25,7 @@ function findInNodes(key, nodeArr)
  * Otherwise, ie, the inservice/outservice fields of the nodes are empty, throws an exception (this shouldn't happen)
  * IN: the model
  * OUT: void (model is updated directly)
+ * TODO: make an update ports button in index.html ? 
  */
 function updatePorts(model)
 {
@@ -140,6 +141,8 @@ function MLPCheck(model)
 // 	Decoders
 // ------------------------------------
 
+//TODO: as of today, all decoders are only for MLP
+
 /**
  * This script contains decoders for each target library
  * Each function decodes JSON dictionnaries stack from input, and
@@ -154,46 +157,59 @@ function MLPCheck(model)
  * @return: stack list of strings (representing the command lines)
  * TODO: add architecture checking
  */
-function decoderKeras(model){
-  var code = "\
- from keras.models import Sequential\n \
-from keras.layers import Dense\n \
-import numpy\n \
-# create model\n \
-model = Sequential() \n";
+function decoderKeras(model)
+{
+	var code = "from keras.models import Sequential\n" +
+			   "from keras.layers import Dense\n" +
+			   "import numpy\n\n\n" +
+			   "# creating the ANN model\n\n" +
+			   "model = Sequential()\n\n";
   
-  var nodes = model.nodeDataArray;
-  var links = model.linkDataArray;
-  
-  for(var i=0; i<links.length; i++){
-    var currKey = links[i].from;
-    var foundKey = 0;
-    var currNode = {};
-    //Look for node for key == FROM
-    for (var j=0; nodes.length; j++){
-      if(nodes[j].key == currKey){
-        currNode = nodes[j];
-        console.log(currNode);
-        break;
-      }
-    }
-    code += " model.add(Dense(units="+ currNode.outservices[0].name+"))\
-\n model.add(Activation('"+ currNode.name +"'))\n"; 
-  }
-  //Look for node with key == TO
-  var currKeyTo = links[i-1].to;
-  var currNodeTo = {};
-  for (var k=0; nodes.length; k++){
-      if(nodes[k].key == currKeyTo){
-        currNodeTo = nodes[k];
-        break;
-      }
-  }
-  code += " model.add(Dense(units="+ currNodeTo.inservices[0].name +"))\
-\n model.add(Activation('"+ currNodeTo.name +"'))";
-  
-  return code;
-  
+	var nodes = model.nodeDataArray;
+	var links = model.linkDataArray;
+
+  	var inputLayer;
+	var outputLayer;
+	var hiddenLayers = [];
+	
+	for (var i=0; i < nodes.length; i++)
+	{
+		if 	    (nodes[i].inOut === 2) {outputLayer = nodes[i];}
+		else if (nodes[i].inOut === 1) {inputLayer = nodes[i];}
+		else                           {hiddenLayers.push(nodes[i]);}
+	}
+
+	var linksTo = [];
+	var linksFr = [];
+	for (i=0; i < links.length; i++)
+	{
+		linksTo.push(links[i].to);
+		linksFr.push(links[i].from);
+	}
+
+	var sortedLayers = [];
+	sortedLayers.push(inputLayer);
+
+	for (i=0; i < hiddenLayers.length; i++) 
+	{
+		var currKey = sortedLayers[i].key;
+		var pos = linksFr.indexOf(currKey);
+		var newKey = linksTo[pos];
+		if (newKey === outputLayer.key) break;
+		var newLayer = findInNodes(newKey, hiddenLayers);
+		sortedLayers.push(newLayer);
+	}
+
+	sortedLayers.push(outputLayer);
+    console.log(sortedLayers);  
+
+	for (i=0; i < sortedLayers.length;i++)
+	{
+		code += "model.add(Dense(units="+ sortedLayers[i].inservices[0].name+"))\n"+ 
+				"model.add(Activation('"+ sortedLayers[i].name +"'))\n"; 
+  	}
+
+	return code;  
 }
 
 /**
@@ -216,18 +232,19 @@ function decoderTflow(model)
 	
 	for (var i=0; i < nodes.length; i++)
 	{
-		if 	    (nodes[i].inOut === 2) outputLayer = nodes[i];
-		else if (nodes[i].inOut === 1) inputLayer = nodes[i];
-		else                           hiddenLayers.push(nodes[i]);
+		if 	    (nodes[i].inOut === 2) {outputLayer = nodes[i];}
+		else if (nodes[i].inOut === 1) {inputLayer = nodes[i];}
+		else                           {hiddenLayers.push(nodes[i]);}
 	}
-  
+   
+	
 	var inputSizeStr = inputLayer.inservices[0].name;
 	var outputSizeStr = outputLayer.inservices[0].name;
 
 	code += "#placeholders act as a way to remember the size of the input value and the output value, respectively\n" +
 			"x = tf.placeholder(tf.float32, shape=[None," + inputSizeStr + "])\n" +
-			"y_ = tf.placeholder(tf.float32, shape=[None," + outputSizeStr + "])\n";
-
+			"y_ = tf.placeholder(tf.float32, shape=[None," + outputSizeStr + "])\n\n";
+	
 	var linksTo = [];
 	var linksFr = [];
 	for (i=0; i < links.length; i++)
@@ -258,7 +275,7 @@ function decoderTflow(model)
       console.log(sortedLayers[i].inservices[0].name);
       neuronNbArr.push(parseInt(sortedLayers[i].inservices[0].name, 10));
     }
-  
+    
     console.log(neuronNbArr + "   " + neuronNbArr.length);
 	//making an index of weight matrices
 	code += "#weights of synapses between each layer stocked as a matrix\nweights = {\n";
@@ -296,7 +313,7 @@ function decoderTflow(model)
 		else 	   {code += "layer_" + (i-1) + ",";}
 		code += "weights['W" + i + "']), biases['b" + i + "'])\n";
 		
-		//activation, output layer has none
+		//activation
 		//TODO, should the user be recommended to have the output layer be of linear activation ?
 		code += "    layer_" + i + " = tf.nn." + sortedLayers[i].name +
 				"(layer_" + i + ")\n";
@@ -313,7 +330,7 @@ function decoderTflow(model)
 			"2) Initializing global variables\n"+
 			"3) Running the training session with appropriate hyperparameters and datasets\n" +
 			"4) Testing the model and calculating its accuracy\n\"\"\"\n\n";		
-
+	
 	return code;
 }
 /**
@@ -330,6 +347,6 @@ function decoderTheano(model) {
  * IN: model object
  * @return: stack list of strings (representing the command lines)
  */
-function decoderTorch(decoder) {
+function decoderTorch(model) {
 
 }
