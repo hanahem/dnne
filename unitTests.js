@@ -14,10 +14,10 @@ var model1 =
 	linkToPortIdProperty: "toPort",
 	nodeDataArray: 
 	[
-		{ key: 1, name: "sigmoid",inservices: [{ name: "125" }], outservices: [{name: "500"}], loc: "0 0", layer:"Dense", inOut:1, color:"#ffc86f" },
-		{ key: 2, name: "tanh", inservices: [{ name: "500" }], outservices: [{name: "300"}], loc: "230 60", layer:"Dense", inOut:0, color:"#549fff"},
-		{ key: 3, name: "relu", inservices: [{ name: "300" }], outservices: [{name: "10"}], loc: "360 80", layer:"Dense", inOut:0, color:"#549fff" },
-		{ key: 4, name: "sigmoid", inservices: [{ name: "10" }], loc: "450 50", layer:"Dense", inOut:2, color:"#b3ff6f" }
+		{ key: 1, name: "", activation : "sigmoid",inservices: [{ name: "125" }], outservices: [{name: "500"}], loc: "0 0", layer:"Dense", inOut:1, color:"#ffc86f" },
+		{ key: 2, name: "", activation : "tanh", inservices: [{ name: "500" }], outservices: [{name: "300"}], loc: "230 60", layer:"Dense", inOut:0, color:"#549fff"},
+		{ key: 3, name: "", activation : "relu", inservices: [{ name: "300" }], outservices: [{name: "10"}], loc: "360 80", layer:"Dense", inOut:0, color:"#549fff" },
+		{ key: 4, name: "", activation : "sigmoid", inservices: [{ name: "10" }], loc: "450 50", layer:"Dense", inOut:2, color:"#b3ff6f" }
 	],
 	linkDataArray: 
 	[
@@ -27,6 +27,13 @@ var model1 =
 	]
 };
 
+model1.updateNames() = function () 
+{
+	model1.name = "";
+	model1.name += 
+};
+
+model1.updateNames();
 
 //TODO check for all various alerts by creating different model examples
 
