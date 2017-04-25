@@ -1,4 +1,42 @@
 /**
+ * Updates the number inside the "Port" fields of the links so they are coherent with adjacent layers
+ * In/outservices fields of nodes are always given priority over link fields
+ * If the link data is empty or there is a conflict, the value of the "port" fields are taken from the adjacent layers
+ * Otherwise, ie, the inservice/outservice fields of the nodes are empty, throws an exception (this shouldn't happen)
+ * IN: the model
+ * OUT: void (model is updated directly)
+ * TODO: make an update ports button in index.html ? 
+ */
+function updatePorts()
+{
+	var nodes = myDiagram.model.nodeDataArray;
+	var links = myDiagram.model.linkDataArray;
+
+	for (var i=0; i < links.length; i++)
+	{
+		var inKey = links[i].from;
+		var outKey = links[i].to;
+		
+		var inNode = findInNodes(inKey, nodes);
+		var outNode = findInNodes(outKey, nodes);
+
+		myDiagram.model.linkDataArray[i].fromPort = inNode.outservices[0].name; //TODO does this work, or should links[i] be replaced by model.linkDataArray[i] ?
+		myDiagram.model.linkDataArray[i].toPort = outNode.inservices[0].name;		
+	}
+	for (var i=0; i < links.length; i++)
+	{
+		if (links[i].fromPort !== links[i].toPort) 
+		{
+			alert("Conflict at link " + i + "; no link should have toPort and fromPort fields with different values" + 
+				"\nPlease resolve conflict by appropriately changing layer inservice and outservice fields to fix code output" +
+				"\nPlease retry to update ports after this correction, as other mistakes may be found");
+		}
+	}
+}
+
+
+
+/**
  * outputCodeKeras : updates the code output ; function called by Keras button
  */
 function outputCodeKeras() 
@@ -60,20 +98,22 @@ function layerMaker(type, nIn, nOut, link) {
  * @return string: a position string as follows "x y", 
  * where x is the next free coordinate square in the canvas
  * and y is the average of the other elements' y coordinate
- * TODO: test-cases
+ * TODO: test-cases; change so that the new location is where the user dropped the box
  */
 function generateNewPosition() {
 	var nodes = myDiagram.model.nodeDataArray;
+
 	var posArrX = [];
 	var posArrY = [];
 	for(var i=0; i < nodes.length; i++)
 	{
 		var splitStr = nodes[i].loc.split(" ");
-		posArrX.push(parseInt(splitStr[0], 10));
 		posArrY.push(parseInt(splitStr[1], 10));
+		if (nodes[i].inOut === 2) continue; //the output node is not deletable, so necessarily the new node should appear to its left
+		posArrX.push(parseInt(splitStr[0], 10));
 	}
 
-	var newX = Math.max.apply(Math, posArrX) + 100;
+	var newX = Math.max.apply(Math, posArrX) + 70;
 
 	var newY = 0;
 	for(i=0; i<posArrY.length; i++) newY += posArrY[i];
@@ -81,6 +121,37 @@ function generateNewPosition() {
 
 	return newX + " " + newY;
 }
+
+/**
+ * Returns the string for the node.name field in the model
+ * This is important because the node.name field is what shows up on the UI shapes
+ */
+function getNodeInfoStr(key)
+{
+	var node = findInNodes(key, myDiagram.model.nodeDataArray);
+	var str = node.activation + "\n" + node.inservices[0].name;
+	if (node.inOut === 1) str += "\nINPUT";
+	if (node.inOut === 2) str += "\nOUTPUT";
+	return str;
+}
+
+/**
+ * Finds a node in an array of nodes given its key
+ * IN : a node array, a primary key
+ * OUT : the corresponding node
+ */
+function findInNodes(key, nodeArr)
+{
+	for (var i=0; i < nodeArr.length; i++)
+	{
+		if (nodeArr[i].key === key) return nodeArr[i];
+	}
+	console.log("Inexistant node");
+	return null;
+}
+
+
+
 
 /**
  * zoom: a function that zooms/unzooms on the model, it should be binded with the zoom buttons

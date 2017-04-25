@@ -16,8 +16,9 @@ var lastKey = 3;
 function addLayer(layerName, input, output, activ) {
     var location = generateNewPosition();
     //alert(location);
-    var elem = { key: lastKey, name: activ, inservices: [{ name: input }], outservices : [{ name: output}], loc: location, layer:layerName, inOut:2, color:"#549fff"  };
+    var elem = { key: lastKey, name: "", activation: activ, inservices: [{ name: input }], outservices : [{ name: output}], loc: location, layer:layerName, inOut:0, color:"#549fff"  };
     myDiagram.model.addNodeData(elem);
+	elem.name = getNodeInfoStr(elem.key);
     lastKey++;
     
 }

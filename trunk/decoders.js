@@ -4,58 +4,6 @@
 
 
 /**
- * Finds a node in an array of nodes given its key
- * IN : a node array, a primary key
- * OUT : the corresponding node
- */
-function findInNodes(key, nodeArr)
-{
-	for (var i=0; i < nodeArr.length; i++)
-	{
-		if (nodeArr[i].key === key) return nodeArr[i];
-	}
-	console.log("Inexistant node");
-	return null;
-}
-
-/**
- * Updates the number inside the "Port" fields of the links so they are coherent with adjacent layers
- * In/outservices fields of nodes are always given priority over link fields
- * If the link data is empty or there is a conflict, the value of the "port" fields are taken from the adjacent layers
- * Otherwise, ie, the inservice/outservice fields of the nodes are empty, throws an exception (this shouldn't happen)
- * IN: the model
- * OUT: void (model is updated directly)
- * TODO: make an update ports button in index.html ? 
- */
-function updatePorts()
-{
-	var nodes = myDiagram.model.nodeDataArray;
-	var links = myDiagram.model.linkDataArray;
-
-	for (var i=0; i < links.length; i++)
-	{
-		var inKey = links[i].from;
-		var outKey = links[i].to;
-		
-		var inNode = findInNodes(inKey, nodes);
-		var outNode = findInNodes(outKey, nodes);
-
-		myDiagram.model.linkDataArray[i].fromPort = inNode.outservices[0].name; //TODO does this work, or should links[i] be replaced by model.linkDataArray[i] ?
-		myDiagram.model.linkDataArray[i].toPort = outNode.inservices[0].name;		
-	}
-	for (var i=0; i < links.length; i++)
-	{
-		if (links[i].fromPort !== links[i].toPort) 
-		{
-			alert("Conflict at link " + i + "; no link should have toPort and fromPort fields with different values" + 
-				"\nPlease resolve conflict by appropriately changing layer inservice and outservice fields to fix code output" +
-				"\nPlease retry to update ports after this correction, as other mistakes may be found");
-		}
-	}
-}
-
-
-/**
  * MultiLayer Perceptron coherence checker
  * Supposes all link ports are up to date and coherent
  * IN: our JSON Model
@@ -212,7 +160,7 @@ function decoderKeras(model)
 	for (i=0; i < sortedLayers.length;i++)
 	{
 		code += "model.add(Dense(units="+ sortedLayers[i].inservices[0].name+"))\n"+ 
-				"model.add(Activation('"+ sortedLayers[i].name +"'))\n"; 
+				"model.add(Activation('"+ sortedLayers[i].activation +"'))\n"; 
   	}
 
 	return code;  
@@ -321,7 +269,8 @@ function decoderTflow(model)
 		
 		//activation
 		//TODO, should the user be recommended to have the output layer be of linear activation ?
-		code += "    layer_" + i + " = tf.nn." + sortedLayers[i].name +
+		if (sortedLayers[i].activation === "linear") continue; //This should send the value to the next tensor as is, just like "linear" in Keras
+		code += "    layer_" + i + " = tf.nn." + sortedLayers[i].activation +
 				"(layer_" + i + ")\n";
 	}
 	code += "    return layer_" + (i-1) + "\n\n"; //i-1 because it's i === neuronNbArr.length that breaks the loop
