@@ -33,6 +33,34 @@ function infoString(obj) {
       msg = "node/"+node.data.key+"/"+node.data.name+"/"+node.data.inservices[0].name+"/"+node.data.outservices[0].name+"/"+node.data.layer+"/"+node.data.color;
     }
   }
+  //========================
+  //INSPECTOR CHANGES HANDLER
+  //========================
+  //ACTIVATION HANDLER
+  $( "#inspectActiv" ).change(function() { //captures changes on the identified HTML tag
+  console.log( "Handler for .change() called." + this.value );
+  myDiagram.model.setDataProperty(obj.part.data, "name", this.value); // Binds the new input value (this) with the selected GoJs object
+  });
+  
+  //INPUT SIZE HANDLER (NODE)
+  $( "#inspectInput" ).change(function() { //captures changes on the identified HTML tag
+  console.log( "Handler for .change() called." + this.value );
+  myDiagram.model.setDataProperty(obj.part.data.inservices[0], "name", this.value); // Binds the new input value (this) with the selected GoJs object
+  toSize.value = this.value;
+    
+  });
+  //OUTPUT SIZE HANDLER (NODE)
+  $( "#inspectOutput" ).change(function() { //captures changes on the identified HTML tag
+  console.log( "Handler for .change() called." + this.value );
+  myDiagram.model.setDataProperty(obj.part.data.outservices[0], "name", this.value); // Binds the new input value (this) with the selected GoJs object
+  });
+  
+  //INSPECT COLOR HANDLER
+  $( "#inspectColor" ).change(function() { //captures changes on the identified HTML tag
+  console.log( "Handler for .change() called." + this.value );
+  myDiagram.model.setDataProperty(obj.part.data, "color", this.value); // Binds the new input value (this) with the selected GoJs object
+  });
+  
   return msg;
   }
   
@@ -95,64 +123,3 @@ function showArrowInfo(e, obj) {
     }
   }
 }
-
-function visibChange() {
-  var ins1 = document.getElementById("inspectorNode");
-  var ins2 = document.getElementById("inspectorLink");
-  ins1.style.display = "none";
-  ins2.style.display = "block";
-}
-
-//====================
-//  CHANGE HANDLER
-//====================
-
-/*
-  $( "#inspectActiv" ).change(function() {
-  alert( "Handler for .change() called." + this.value );
-  var currentKey = document.getElementById("inspectKey");
-  alert(currentKey.value);
-  //find the layer with the good key (the selected layer)
-  alert(model.toJson());
-  for (var i=0; i<model.nodeDataArray.length; i++){
-    if(model.nodeDataArray[i].key == currentKey){
-      alert(model.nodeDataArray[i].key);
-      model.nodeDataArray[i].name = this.value;
-      break;
-    }
-  }
-  //after finding the right layer set its activation to the handler's capture
-  //selectLayer.activation = this.value;
-});
-
-
-function updateInspector(elem) {
-  var keyDom = document.getElementById("inspectKey");
-  var currentKey = keyDom.value;
-  //alert(currentKey);
-  /*for (var i=0; i<myDiagram.model.nodeDataArray.length; i++){
-    if(myDiagram.model.nodeDataArray[i].key == currentKey){
-      alert(myDiagram.model.nodeDataArray[i].key);
-      alert(elem.value);
-      //setDataProperty(myDiagram.model.nodeDataArray[i].inservices[0], 'name', elem.value.toString());
-      setDataProperty(myDiagram.modelData, nodeDataArray[i].inservices[0].name, elem.value.toString());
-      break;
-    }
-  }
-  var selectionButton = document.getElementById("selectionButton");
-selectionButton.addEventListener("click", function() {
-  myDiagram.startTransaction("change color");
-  var it = myDiagram.selection.iterator;
-  while (it.next()) {
-    var node = it.value;
-    var shape = node.findObject("SHAPE");
-    // If there was a GraphObject in the node named SHAPE, then set its fill to red:
-    if (shape !== null) {
-      shape.fill = "red";
-    }
-  }
-  myDiagram.commitTransaction("change color");
-});
-}
-*/
-
