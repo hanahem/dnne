@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html ng-app="dnne">
+
+  <head>
+
+    <script>document.write('<base href="' + document.location + '" />');</script>
+    <script data-require="angular.js@1.5.x" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.11/angular.min.js" data-semver="1.5.11"></script>
+    <script src="app.js"></script>
+    
+    
+    
+<title>Deep Neural Net Editor</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+<!-- GoJS & JQuery imports -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gojs/1.7.3/go.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="bulma.css">
+<link rel="stylesheet" href="https://raw.githubusercontent.com/jgthms/bulma/master/css/bulma.css.map">
+
+<link rel='stylesheet' href='style.css' />
+</head>
+
+<body onload="init()">
+
+  <div id="sample" class="tile is-ancestor">
+
+
+    <div class="tile is-1 is-vertical is-parent box">
+      <!-- IMAGES DIVS -->
+      <div class="is-child box">
+        <img src="images/sigmoid.png" draggable="true" ondragstart="drag(event)" id="sigmoid" width="100" height="100">
+      </div>
+      <div class="is-child box">
+        <img src="images/tanh.png" draggable="true" ondragstart="drag(event)" id="tanh" width="100" height="100">
+      </div>
+      <div class="is-child box">
+        <img src="images/softmax.png" draggable="true" ondragstart="drag(event)" id="softmax" width="100" height="100">
+      </div>
+      <div class="is-child box">
+        <img src="images/relu.png" draggable="true" ondragstart="drag(event)" id="relu" width="100" height="100">
+      </div>
+      <div class="is-child box">
+        <img src="images/softplus.png" draggable="true" ondragstart="drag(event)" id="softplus" width="100" height="100">
+      </div>
+      
+	   <button class="button is-info is-outlined" onclick="updatePorts()">Ports</button><br> <!-- TODO: test and fix update ports and inspectors -->
+    <button class="button is-info is-outlined" onclick="outputCodeTflow()">TFlow</button><br>
+      <button class="button is-info is-outlined" onclick="outputCodeKeras()">Keras</button>
+	   <button class="button is-info is-outlined" onclick="outputCodeDebug()">Debug</button>
+      <button class="button is-info is-outlined" id="selectionButton" onclick="">VIZ</button>
+      <button class="button is-info is-outlined" id="svgButton">Download ANN</button>
+      <div id="myArrowheadInfo" style="color:red"></div>
+      <input id="someInput" value=""/>
+    </div>
+    
+    <div class="tile is-8 box">
+    <div id="myDiagramDiv" ondrop="dropActivation(event)" ondragover="allowDrop(event)" style="width:100%; height:100%; border:1px solid rgb(198, 198, 198);"></div>
+    </div>
+    
+    <div class="tile is-vertical is-parent box">
+      
+      <!-- NODE INSPCTOR DIV -->
+      <div id="inspectorNode" class="tile is-child box" style="display:block;">
+        <label for="inspectLayerType">Layer type</label>
+        <input class="input is-small" id="inspectLayerType" value="Dense" readonly/><br>
+        <label for="inspectActiv">Activation</label>
+        <select class="select is-small" id="inspectActiv" name="select">
+          <option value="sigmoid">sigmoid</option> 
+          <option value="relu" selected>relu</option>
+          <option value="tanh">tanh</option>
+          <option value="softplus">softplus</option>
+          <option value="softmax">softmax</option>
+        </select><br>
+        <label for="inspectInput">Input</label>
+        <input class="input is-small" id="inspectInput" type="number" value="18" onchange="updateInspector(this)"><br>
+        <label for="inspectOutput">Output</label>
+        <input class="input is-small" id="inspectOutput" type="number" value="18"><br>
+        <label for="inspectColor">Layer color</label>
+        <input class="input is-small" id="inspectColor" type="color"/>
+        <label for="inspectinspectKey">Key</label>
+        <input class="input is-small" type="number" id="inspectKey" readonly />
+      </div>
+      
+      <!-- LINK INSPCTOR DIV -->
+      <div id="inspectorLink" class="is-child box" style="display:none;">
+        <label for="inspectFrom">From Layer</label>
+        <input class="input is-small" id="inspectorFrom" value=""/><br>
+        <label for="inspectInSize">Input size</label>
+        <input class="input is-small" id="inspectorInSize" value=""/><br>
+        <label for="inspectTo">To Layer</label>
+        <input class="input is-small" id="inspectorTo" value=""/><br>
+        <label for="inspectOutSize">Output size</label>
+        <input class="input is-small" id="inspectorOutSize" value=""/>
+      </div>
+    
+      <textarea id="mySavedModel" class="is-child box" style="width:100%;height:100%;display:none;"></textarea>
+      <textarea id="codeOutput" class="is-child box" style="width:100%;height:100%;"></textarea>
+    </div>
+    
+    
+  </div>
+
+
+</body>
+
+<!-- JS scripts calls -->
+<script src="script.js"></script>
+<script src="utils.js"></script>
+<script src="decoders.js"></script>
+<script src="stackers.js"></script>
+<script src="dragdropMaker.js"></script>
+<script src="inspector.js"></script>
+</html>
