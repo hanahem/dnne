@@ -245,6 +245,8 @@
               { from: 3, fromPort: "10", to: 4, toPort: "10" },
             ]
         });
+  //listner for saving button
+         document.getElementById("svgButton").addEventListener("click", makeSvg);
     
 	//calls the getNodeInfoStr functions appropriately to update all node.name fields
 	myDiagram.model.updateNames = function()
@@ -283,3 +285,36 @@
     }
     
 }
+
+
+    //=========================
+    //  Saving Diagram
+    //=========================
+    
+ 
+    function myCallback(ann) {
+      var url = window.URL.createObjectURL(ann);
+      var filename = "myNeuralNetwork.svg";
+      var a = document.createElement("a");
+      a.style = "display: none";
+      a.href = url;
+      a.download = filename;
+// IE 11
+      if (window.navigator.msSaveBlob !== undefined) {
+        window.navigator.msSaveBlob(ann, filename);
+        return;
+      }
+      document.body.appendChild(a);
+      requestAnimationFrame(function() {
+        a.click();
+        window.URL.revokeObjectURL(url);
+        document.body.removeChild(a);
+      });
+    }
+    
+    function makeSvg() {
+      var svg = myDiagram.makeSvg({ scale: 1, background: "white" });
+      var svgstr = new XMLSerializer().serializeToString(svg);
+      var ann = new Blob([svgstr], { type: "image/svg+xml" });
+      myCallback(ann);
+    }
