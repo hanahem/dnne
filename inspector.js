@@ -24,13 +24,13 @@ function infoString(obj) {
     var node = part;
     var link = node.linksConnected.first();
     if(node.data.inOut == 2){//Case if output layer only show inservices
-      msg = "node/"+node.data.key+"/"+node.data.name+"/"+node.data.inservices[0].name+"/0/"+node.data.layer+"/"+node.data.color;
+      msg = "node/"+node.data.key+"/"+node.data.activation+"/"+node.data.inservices[0].name+"/0/"+node.data.layer+"/"+node.data.color;
     }
-    else if(node.data.inOut == 1){//Case if input layer onlyshow outservices
-      msg = "node/"+node.data.key+"/"+node.data.name+"/0/"+node.data.outservices[0].name+"/"+node.data.layer+"/"+node.data.color;
+    else if(node.data.inOut == 1){//Case if input layer onlyshow outservices //TRISTAN: changed because inservices act as number of neuron and are relevant. TODO Maybe remove this else if line
+      msg = "node/"+node.data.key+"/"+node.data.activation+"/"+node.data.inservices[0].name+"/"+node.data.outservices[0].name+"/"+node.data.layer+"/"+node.data.color;
     }
     else{//Case if hidden layer show inservices & outservices
-      msg = "node/"+node.data.key+"/"+node.data.name+"/"+node.data.inservices[0].name+"/"+node.data.outservices[0].name+"/"+node.data.layer+"/"+node.data.color;
+      msg = "node/"+node.data.key+"/"+node.data.activation+"/"+node.data.inservices[0].name+"/"+node.data.outservices[0].name+"/"+node.data.layer+"/"+node.data.color;
     }
   }
   //========================
@@ -39,7 +39,7 @@ function infoString(obj) {
   //ACTIVATION HANDLER
   $( "#inspectActiv" ).change(function() { //captures changes on the identified HTML tag
   console.log( "Handler for .change() called." + this.value );
-  myDiagram.model.setDataProperty(obj.part.data, "name", this.value); // Binds the new input value (this) with the selected GoJs object
+  myDiagram.model.setDataProperty(obj.part.data, "activation", this.value); // Binds the new input value (this) with the selected GoJs object
   });
   
   //INPUT SIZE HANDLER (NODE)

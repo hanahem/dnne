@@ -269,8 +269,9 @@ function decoderTflow(model)
 		
 		//activation
 		//TODO, should the user be recommended to have the output layer be of linear activation ?
-		if (sortedLayers[i].activation === "linear") continue; //This should send the value to the next tensor as is, just like "linear" in Keras
-		code += "    layer_" + i + " = tf.nn." + sortedLayers[i].activation +
+		if (sortedLayers[i+1].activation === "linear") continue; //This should send the value to the next tensor as is, just like "linear" in Keras
+		//(i+1) in the activation, as our input layer corresponds to the placeholder and is linear by default
+		code += "    layer_" + i + " = tf.nn." + sortedLayers[(i+1)].activation +
 				"(layer_" + i + ")\n";
 	}
 	code += "    return layer_" + (i-1) + "\n\n"; //i-1 because it's i === neuronNbArr.length that breaks the loop
@@ -279,7 +280,7 @@ function decoderTflow(model)
 	code += "#Construction of the model\npred = multilayer_perceptron(x, weights, biases)\n\n";
 	
 
-    //TODO maybe provide a text framework for the with hyperparameters that are defined with "ENTER APPROPRIATE VALUE OF TYPE (#TYPE) HERE"; 
+    //TODO maybe provide a text framework/template for the rest, with hyperparameters that are defined with "ENTER APPROPRIATE VALUE OF TYPE (#TYPE) HERE"; 
 	code += "\"\"\"\nFollowing steps include:\n" +
 			"1) Defining loss function and optimizer\n"+
 			"2) Initializing global variables\n"+

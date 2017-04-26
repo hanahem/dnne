@@ -14,10 +14,10 @@ var model1 =
 	linkToPortIdProperty: "toPort",
 	nodeDataArray: 
 	[
-		{ key: 1, name: "", activation : "sigmoid",inservices: [{ name: "125" }], outservices: [{name: "500"}], loc: "0 0", layer:"Dense", inOut:1, color:"#ffc86f" },
+		{ key: 1, name: "", activation : "linear",inservices: [{ name: "125" }], outservices: [{name: "500"}], loc: "0 0", layer:"Dense", inOut:1, color:"#ffc86f" },
 		{ key: 2, name: "", activation : "tanh", inservices: [{ name: "500" }], outservices: [{name: "300"}], loc: "230 60", layer:"Dense", inOut:0, color:"#549fff"},
 		{ key: 3, name: "", activation : "relu", inservices: [{ name: "300" }], outservices: [{name: "10"}], loc: "360 80", layer:"Dense", inOut:0, color:"#549fff" },
-		{ key: 4, name: "", activation : "sigmoid", inservices: [{ name: "10" }], loc: "450 50", layer:"Dense", inOut:2, color:"#b3ff6f" }
+		{ key: 4, name: "", activation : "linear", inservices: [{ name: "10" }], loc: "450 50", layer:"Dense", inOut:2, color:"#b3ff6f" }
 	],
 	linkDataArray: 
 	[
@@ -78,11 +78,10 @@ function testCase_TFDecoder()
 		"\n" + 
 		"def multilayer_perceptron(x, weights, biases):\n" + 
 		"    layer_0 = tf.add(tf.matmul(x,weights['W0']), biases['b0'])\n" + 
-		"    layer_0 = tf.nn.sigmoid(layer_0)\n" + 
+		"    layer_0 = tf.nn.tanh(layer_0)\n" + 
 		"    layer_1 = tf.add(tf.matmul(layer_0,weights['W1']), biases['b1'])\n" + 
-		"    layer_1 = tf.nn.tanh(layer_1)\n" + 
-		"    layer_2 = tf.add(tf.matmul(layer_1,weights['W2']), biases['b2'])\n" + 
-		"    layer_2 = tf.nn.relu(layer_2)\n" + 
+		"    layer_1 = tf.nn.relu(layer_1)\n" + 
+		"    layer_2 = tf.add(tf.matmul(layer_1,weights['W2']), biases['b2'])\n" +  
 		"    return layer_2\n" + 
 		"\n" + 
 		"#Construction of the model\n" + 
