@@ -39,7 +39,9 @@ function infoString(obj) {
   //ACTIVATION HANDLER
   $( "#inspectActiv" ).change(function() { //captures changes on the identified HTML tag
   console.log( "Handler for .change() called." + this.value );
-  myDiagram.model.setDataProperty(obj.part.data, "name", this.value); // Binds the new input value (this) with the selected GoJs object
+  myDiagram.model.startTransaction("activation");
+  myDiagram.model.setDataProperty(obj.part.data, "activation", this.value); // Binds the new input value (this) with the selected GoJs object
+  myDiagram.model.commitTransaction("activation");
   });
   
   //INPUT SIZE HANDLER (NODE)

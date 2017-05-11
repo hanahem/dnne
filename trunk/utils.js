@@ -129,9 +129,11 @@ function generateNewPosition() {
 function getNodeInfoStr(key)
 {
 	var node = findInNodes(key, myDiagram.model.nodeDataArray);
-	var str = node.activation + "\n" + node.inservices[0].name;
-	if (node.inOut === 1) str += "\nINPUT";
-	if (node.inOut === 2) str += "\nOUTPUT";
+	var str = node.activation + "\n\n";
+	if (node.inOut === 0) str += "HIDDEN: " + node.inservices[0].name;
+	if (node.inOut === 1) str += "INPUT: " + node.inservices[0].name;
+	if (node.inOut === 2) str += "OUTPUT: " + node.inservices[0].name;
+	else str += "\nNextExpected: " + node.outservices[0].name;
 	return str;
 }
 
