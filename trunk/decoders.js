@@ -157,11 +157,22 @@ function decoderKeras(model)
 	sortedLayers.push(outputLayer);
     console.log(sortedLayers);  
 
-	for (i=0; i < sortedLayers.length;i++)
+	for (i=0; i < sortedLayers.length-1; i++)
 	{
-		code += "model.add(Dense(units="+ sortedLayers[i].inservices[0].name+"))\n"+ 
-				"model.add(Activation('"+ sortedLayers[i].activation +"'))\n"; 
+		if (i===0)
+		{
+			code += "model.add(Dense(" + sortedLayers[i+1].inservices[0].name +
+					", activation='" + sortedLayers[i+1].activation +
+					"', input_shape=("+ sortedLayers[i].inservices[0].name + ",)))\n";
+		}
+		else
+		{
+			code += "model.add(Dense(units="+ sortedLayers[i+1].inservices[0].name+"))\n"+ 
+					"model.add(Activation('"+ sortedLayers[i+1].activation +"'))\n"; 
+		}
   	}
+
+	code += "model.summary()"	
 
 	return code;  
 }
@@ -267,10 +278,9 @@ function decoderTflow(model)
 		else 	   {code += "layer_" + (i-1) + ",";}
 		code += "weights['W" + i + "']), biases['b" + i + "'])\n";
 		
-		//activation
-		//TODO, should the user be recommended to have the output layer be of linear activation ?
-		if (sortedLayers[i].activation === "linear") continue; //This should send the value to the next tensor as is, just like "linear" in Keras
-		code += "    layer_" + i + " = tf.nn." + sortedLayers[i].activation +
+		//activation, 0th is necessarily linear and ignored.
+		if (sortedLayers[i+1].activation === "linear") continue; //This should send the value to the next tensor as is, just like "linear" in Keras
+		code += "    layer_" + i + " = tf.nn." + sortedLayers[i+1].activation +
 				"(layer_" + i + ")\n";
 	}
 	code += "    return layer_" + (i-1) + "\n\n"; //i-1 because it's i === neuronNbArr.length that breaks the loop
@@ -291,7 +301,7 @@ function decoderTflow(model)
 /**
  * decoderTheano: encodes JSON to Theano syntax
  * IN: model
- * @return: stack list of strings (representing the command lines)
+ * @return: a long string (representing the command lines)
  */
 function decoderTheano(model) {
 
@@ -300,7 +310,7 @@ function decoderTheano(model) {
 /**
  * decoderTorch: transforms  to Torch syntax
  * IN: model object
- * @return: stack list of strings (representing the command lines)
+ * @return: a long string (representing the command lines)
  */
 function decoderTorch(model) {
 
