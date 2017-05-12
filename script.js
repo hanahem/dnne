@@ -98,6 +98,8 @@
             toLinkable: true, toLinkableSelfNode: false, toLinkableDuplicates: true },
             new go.Binding("stroke", "isSelected", function(b) { return b ? SelectedBrush : UnselectedBrush; }).ofObject(),
             new go.Binding("fill", "color")),
+
+	//Inspiration from https://github.com/NorthwoodsSoftware/GoJS/blob/master/samples/arrowheads.html
             {click: showArrowInfo,  // defined in inspector.js
             toolTip:  // define a tooltip for each link that displays its information
               $(go.Adornment, "Auto",
@@ -156,7 +158,8 @@
     //   Selection handler
     //=========================
 
-	//https://github.com/NorthwoodsSoftware/GoJS/blob/master/samples/selectablePorts.html
+	//Found at/credit : https://github.com/NorthwoodsSoftware/GoJS/blob/master/samples/selectablePorts.html
+	//Seems to be useless code
 
     function findAllSelectedItems() {
       var items = [];
@@ -201,6 +204,7 @@
 
     myDiagram.commandHandler.deleteSelection = function() {
       var items = findAllSelectedItems();
+	  //TODO it seems that findAllSelectedItems is useless, and that only the else statement is read
       if (items.length > 0) {  // if there are any selected items, delete them
         myDiagram.startTransaction("delete items");
         for (var i = 0; i < items.length; i++) {
@@ -220,6 +224,8 @@
         }
         myDiagram.commitTransaction("delete items");
       } else {  // otherwise just delete nodes and/or links, as usual
+		console.log(myDiagram.model);
+		console.log(this);
         go.CommandHandler.prototype.deleteSelection.call(myDiagram.commandHandler);
       }
     };
@@ -235,11 +241,12 @@
           copiesArrayObjects: true,
           linkFromPortIdProperty: "fromPort",
           linkToPortIdProperty: "toPort",
+		//TODO outservices added to output node for inspector handlers coherence, see if this causes unexpected problems
           nodeDataArray: [
               { key: 1, name: "if this is displayed, updating the view at startup failed", activation: "linear", inservices: [{ name: "1000"}], outservices: [{name: "500"}], loc: "0 0", layer:"Dense", inOut:1, color:"#b3ff6f" },
               { key: 2, name: "", activation: "tanh", inservices: [{ name: "500" }],  outservices: [{name: "300"}], loc: "230 60", layer:"Dense", inOut:0, color:"#549fff"},
               { key: 3, name: "", activation: "relu", inservices: [{ name: "300" }],  outservices: [{name: "10"}], loc: "400 100", layer:"Dense", inOut:0, color:"#549fff" },
-              { key: 4, name: "", activation: "softmax", inservices: [{ name: "10" }], loc: "600 50", layer:"Dense", inOut:2, color:"#b3ff6f" }
+              { key: 4, name: "", activation: "softmax", inservices: [{ name: "10" }], outservices: [{name: "0"}], loc: "600 50", layer:"Dense", inOut:2, color:"#b3ff6f" }
             ],
           linkDataArray: [
               { from: 1, fromPort: "500", to: 2, toPort: "500" },
@@ -262,7 +269,7 @@
 	    model.commitTransaction("nameUpdate");
 	}
 
-	myDiagram.model.updateNames(); //Initial test call; TODO, add it to inspector wrapper, or to each data changer in the inspector
+	myDiagram.model.updateNames();
     
     //=========================
     //   Creating the Grid

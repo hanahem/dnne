@@ -20,12 +20,14 @@ function MLPCheck(model)
 	{
 		if (links[i].fromPort === "" || links[i].toPort === "")
 		{
-			alert("Some port fields are empty within the links, this might lead to incoherences\nTry fixing this by clicking on Ports");
+			alert("Some port fields are empty within the links, this might lead to incoherences in the code\n"+
+				"Try fixing this by clicking on Ports, then refreshing the code output");
 		}
 		if (links[i].fromPort !== links[i].toPort) 
 		{
-			alert("Conflict at link " + i + 
-				"\nPlease resolve to fix code output");
+			alert("Conflict at link " + i + "in linkDataArray"+ 
+				"\nSee Debug (0 is first element in list) or click on Ports button"+
+				"\nPlease resolve then refresh code output");
 			return false;
 		}
 	}
@@ -45,7 +47,12 @@ function MLPCheck(model)
 		if ((nodes[i].inOut === 1) && (eIn === false))  {eIn  = true; inKey  = nodes[i].key;}
 	}
 
-	if(!(eOut && eIn)) {alert("Missing input or output layer"); return false;}
+	if(!(eOut && eIn)) 
+	{
+		alert("Missing input or output layer"+
+			"\nSince these cannot be added, restart software or Undo previous commands"); 
+		return false;
+	}
 
 	//check that all hidden layers are 1 in, 1 out, by checking the links array
 	var linksTo = [];
@@ -63,7 +70,7 @@ function MLPCheck(model)
 		{
 			if (linksTo[i] === linksTo[j] || linksFr[i] === linksFr[j]) 
 			{
-				alert("Multiple links to, or from, a layer");
+				alert("Multiple links to, or from, a layer\nOnly MLP has been implemented");
 				return false;
 			}
 		}
@@ -81,11 +88,16 @@ function MLPCheck(model)
 	{
 		var currKey = currNode.key;
 		var pos = linksTo.indexOf(currKey);
+		if (pos === -1)
+		{
+			alert("Broken path from Input layer to Output layer");
+			return false;
+		}
 		var newKey = linksFr[pos];
 		if (newKey === inKey) return true; //full path found
 		else currNode = findInNodes(newKey, nodes);
 	}
-	alert("No path found from Input layer to Output layer");
+	alert("Unexpected error in MLPCheck");
 	return false; 
 }
 
