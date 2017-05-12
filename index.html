@@ -17,6 +17,7 @@
 <!-- GoJS & JQuery imports -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gojs/1.7.3/go.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet" href="bulma.css">
@@ -54,7 +55,7 @@
 	  <button class="button is-info is-outlined" onclick="outputCodeDebug()">Debug</button>
       <!--<button class="button is-info is-outlined" id="selectionButton" onclick="">VIZ</button> -->
       <div id="myArrowheadInfo" style="color:red"></div>
-      <input id="someInput" value=""/>
+      <!-- <input id="someInput" value=""/> -->
     </div>
     
     <div class="tile is-8 box">
@@ -75,25 +76,25 @@
           <option value="softplus">softplus</option>
           <option value="softmax">softmax</option>
         </select><br>
-        <label for="inspectInput">Input</label>
+        <label for="inspectInput">Input/Inservices/Neurons</label>
         <input class="input is-small" id="inspectInput" type="number" value="18" onchange="updateInspector(this)"><br>
-        <label for="inspectOutput">Output</label>
+        <label for="inspectOutput">Output/Outservices/NextExpected</label>
         <input class="input is-small" id="inspectOutput" type="number" value="18"><br>
         <label for="inspectColor">Layer color</label>
         <input class="input is-small" id="inspectColor" type="color"/>
-        <label for="inspectinspectKey">Key</label>
+        <label for="inspectKey">Key (read only)</label>
         <input class="input is-small" type="number" id="inspectKey" readonly />
       </div>
       
       <!-- LINK INSPCTOR DIV -->
       <div id="inspectorLink" class="is-child box" style="display:none;">
-        <label for="inspectFrom">From Layer</label>
+        <label for="inspectFrom">Previous Layer Key (read only)</label>
         <input class="input is-small" id="inspectorFrom" value=""/><br>
-        <label for="inspectInSize">Input size</label>
+        <label for="inspectInSize">Input size/fromPort</label>
         <input class="input is-small" id="inspectorInSize" value=""/><br>
-        <label for="inspectTo">To Layer</label>
+        <label for="inspectTo">Following Layer Key (read only)</label>
         <input class="input is-small" id="inspectorTo" value=""/><br>
-        <label for="inspectOutSize">Output size</label>
+        <label for="inspectOutSize">Output size/toPort</label>
         <input class="input is-small" id="inspectorOutSize" value=""/>
       </div>
     

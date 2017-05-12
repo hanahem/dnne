@@ -41,40 +41,49 @@ function infoString(obj) {
   console.log( "Handler for .change() called." + this.value );
   myDiagram.model.startTransaction("activation");
   myDiagram.model.setDataProperty(obj.part.data, "activation", this.value); // Binds the new input value (this) with the selected GoJs object
+  myDiagram.model.updateNames();
   myDiagram.model.commitTransaction("activation");
   });
   
   //INPUT SIZE HANDLER (NODE)
   $( "#inspectInput" ).change(function() { //captures changes on the identified HTML tag
   console.log( "Handler for .change() called." + this.value );
+  myDiagram.model.startTransaction("inservices_input");
   myDiagram.model.setDataProperty(obj.part.data.inservices[0], "name", this.value); // Binds the new input value (this) with the selected GoJs object
-  toSize.value = this.value;
-    
+  myDiagram.model.updateNames();
+  myDiagram.model.commitTransaction("inservices_input");
   });
+
   //OUTPUT SIZE HANDLER (NODE)
   $( "#inspectOutput" ).change(function() { //captures changes on the identified HTML tag
   console.log( "Handler for .change() called." + this.value );
+  myDiagram.model.startTransaction("outservices_output");
   myDiagram.model.setDataProperty(obj.part.data.outservices[0], "name", this.value); // Binds the new input value (this) with the selected GoJs object
+  myDiagram.model.updateNames();
+  myDiagram.model.commitTransaction("outservices_output");
   });
   
   //INSPECT COLOR HANDLER
   $( "#inspectColor" ).change(function() { //captures changes on the identified HTML tag
   console.log( "Handler for .change() called." + this.value );
+  myDiagram.model.startTransaction("color");
   myDiagram.model.setDataProperty(obj.part.data, "color", this.value); // Binds the new input value (this) with the selected GoJs object
+  myDiagram.model.commitTransaction("color");
   });
-  
+
   return msg;
   }
   
 
 /**
- * This functions, after taking the infoString(obj) from an object,
- * it provides a way to visualize and modify each node or link on the diagram
+ * This function, after taking the infoString(obj) from an object,
+ * provides a way to visualize and modify each node or link on the diagram
  * It creates DOM elements (buttons, textfields ...) to make this possible
  * IN:  e: a GraphObject.click event handler to show arrowhead information
  *      obj: an object from the diagram (link or node)
  */
 function showArrowInfo(e, obj) {
+  //obj = findAllSelectedItems();
   var msg = infoString(obj);
   if (msg) {
     var objectType = msg.split("/")[0]; //splits the formatted string and takes the 1st element which is the object type (link or node)
