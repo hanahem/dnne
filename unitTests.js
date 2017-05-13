@@ -119,6 +119,8 @@ function testCase_TFDecoder()
 
 /**
  * Function that runs all available tests to be called early and check the console
+ * TODO ? Should be called, if needed, somewhere in the init() function of script.js,
+ * and unitTests.js should be called in index.html
  */
 
 function runTests()

@@ -125,10 +125,9 @@ function infoString(obj)
  *      obj: an object from the diagram (link or node)
  */
 
-function showArrowInfo(e, obj) 
+function editorHandler(e, obj) 
 {
 	var msg = infoString(obj);
-	console.log("After infoString call, in showArrowInfo");
 	if (msg) 
 	{
 		var objectType = msg.split("/")[0]; //splits the formatted string and takes the 1st element which is the object type (link or node)
@@ -180,7 +179,7 @@ function showArrowInfo(e, obj)
 
 		else 
 		{
-			console.log("error on showArrowInfo");
+			console.log("error on editorHandler");
 		}
 
 	}
