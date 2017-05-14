@@ -11,8 +11,10 @@
  * and extracts its basic information, and returns it as a string
  * formatted like follows :
  * FOR A LINK: "link/from/fromPort/to/toPort"
- * FOR A NODE: "node/key/activation/input/output/layerType/color"
+ * FOR A NODE: "node/key/activation/inservices/outservices/layerType/color"
  * @return: a string formatted as shown above
+ *
+ * NB: It is also where the inspector handlers are bound to the DOM inspector elements
  */
 function infoString(obj) 
 {
@@ -62,8 +64,9 @@ function infoString(obj)
 	//========================
 
 	//ACTIVATION CANCELLER
-	//This is the only way we have found to fix the inspector's major problem, but 
-	//this still leads more minor problems with selections and the undo manager. 
+	//This is the only way we have found to fix the inspector's major problem of never deselecting elements, 
+	//but this solution is brutal and still leads to more minor problems with selections and the undo manager. 
+	//Basically, with the canceller, we force full unbinding any time a handler is called.
 	function canceller()
 	{
 		$( "#inspectActiv" ).off("change");
@@ -114,7 +117,7 @@ function infoString(obj)
 	});
 	
 	return msg;
-	}
+}
 	
 
 /**
@@ -148,12 +151,12 @@ function editorHandler(e, obj)
 			var key = document.getElementById("inspectKey");
 			
 			//ASSIGN EACH VALUE
-			layerType.value = node[5];
+			key.value = node[1];
 			activation.value = node[2];
 			input.value = node[3];
 			output.value = node[4];
+			layerType.value = node[5];
 			color.value = node[6];
-			key.value = node[1];
 		}
 
 		//======WHEN LINK=======

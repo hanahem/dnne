@@ -2,10 +2,10 @@
  * This script contains the init() function
  * The function sets up the initial model and diagram configurations
  * » it sets up the shapes
- * » the nodes and links
+ * » the nodes (layers) and links (arrows)
  * » the model & diagram
  * » the grid
- * It also manages monitoring the model through a JSON String dictionnary
+ * It also manages the monitoring of the model through a JSON String dictionary
  */ 
 function init() {
 	if (window.goSamples) goSamples();	// init for these samples -- you don't need to call this
@@ -34,10 +34,7 @@ function init() {
 	//==========================
 	//Adding node template: Spot
 	//==========================
-		
-	//TODO: modify this variable into a function that maps the colors w.r.t. the layer name
-	//var color = "grey";
-	
+			
 	myDiagram.nodeTemplate =
 		$(go.Node, "Spot",
 			{ selectionAdorned: false },
@@ -100,7 +97,8 @@ function init() {
 						$(go.Adornment, "Auto",
 							$(go.Shape, { fill: "#EFEFCC" }),
 							$(go.TextBlock, { margin: 4 },
-								new go.Binding("text", "", infoString).ofObject())
+								new go.Binding("text", "", infoString).ofObject()
+							)
 						)
 			}
 		);
@@ -127,7 +125,7 @@ function init() {
 	//======================
 	// Creating the model
 	//======================
-	//the inOut property is set to 0 1 or 2 to say respectively : hidden layer, input layer or output layer
+	//the inOut property is set to 0 1 or 2 to refer respectively to : hidden layer, input layer or output layer
 	myDiagram.model =
 		$(go.GraphLinksModel,
 			{
@@ -137,17 +135,20 @@ function init() {
 				linkToPortIdProperty: "toPort",
 				nodeDataArray: 
 				[
-					{ 	key: 1, 
-						name: "if this is displayed, updating the view at startup failed", 
-						activation: "linear", //this is always linear (identity) and ignored. Changing it will not change the output
-						inservices: [{ name: "1000"}], 
-						outservices: [{name: "500"}], 
-						loc: "0 0", 
-						layer:"Dense", 
-						inOut:1, 
+					{ 	
+						key: 1, //a primary key to keep track of various elements
+						name: "if this is displayed, updating the view at startup failed", //the field containing the info displayed on the node
+						activation: "linear", //this is always linear (identity) for input layer and ignored. Changing it will not change the code output
+						inservices: [{ name: "1000"}], //is used to mean number of neurons there are
+						outservices: [{name: "500"}],  //how many neurons are in the next layer
+						//in- and out- services were implemented this way thinking of models which are not linear like MLP
+						loc: "0 0", //the location on the grid
+						layer:"Dense", //a reference for Keras, never changes in this implementation
+						inOut:1, //refers to if the layer is input (1), hidden (0) our output (2).
 						color:"#b3ff6f" 
 					},
-					{ 	key: 2, 
+					{ 	
+						key: 2, 
 						name: "", 
 						activation: "tanh", 
 						inservices: [{ name: "500" }],	
@@ -204,7 +205,7 @@ function init() {
 			}
 		);
 		
-	//calls the getNodeInfoStr functions appropriately to update all node.name fields
+	//calls the getNodeInfoStr functions in utils to appropriately to update all node.name fields which define what's written on each node
 	myDiagram.model.updateNames = function()
 	{
 		// all model changes should happen in a transaction (GoJS)
