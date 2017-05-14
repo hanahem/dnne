@@ -86,11 +86,13 @@ function init() {
 		$(go.Link,
 			{ routing: go.Link.Orthogonal, corner: 10, toShortLength: -3 },
 			{ relinkableFrom: true, relinkableTo: true, reshapable: true, resegmentable: true },
-			$(go.Shape, { stroke: "gray", strokeWidth: 2.5 },
-			new go.Binding("strokeWidth", "size")),
+			$(go.Shape, 
+				{ stroke: "gray", strokeWidth: 2.5 },
+				new go.Binding("strokeWidth", "size")
+			),
 			$(go.Shape,
 				{ toArrow: "Standard", stroke: null }
-				),
+			),
 			{
 				click: editorHandler,
 				toolTip:	// define a tooltip for each link that displays its information
@@ -110,7 +112,7 @@ function init() {
 	//=========================
 	
 	// Override the standard CommandHandler deleteSelection and canDeleteSelection behavior.
-	// If there are any selected items, delete them instead of deleting any selected nodes or links.
+	// Debugging code
 	myDiagram.commandHandler.canDeleteSelection = function() 
 	{
 		return go.CommandHandler.prototype.canDeleteSelection.call(myDiagram.commandHandler);
