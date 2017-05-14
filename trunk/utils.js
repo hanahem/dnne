@@ -1,11 +1,10 @@
 /**
- * Updates the number inside the "Port" fields of the links so they are coherent with adjacent layers
- * In/outservices fields of nodes are always given priority over link fields
+ * Updates the number inside the "Port" fields of the links so they are coherent with the adjacent nodes/layers
+ * In/outservices fields of nodes are always given priority over link "port" fields
  * If the link data is empty or there is a conflict, the value of the "port" fields are taken from the adjacent layers
- * Otherwise, ie, the inservice/outservice fields of the nodes are empty, throws an exception (this shouldn't happen)
+ * Otherwise, ie, the inservice/outservice fields of the nodes are empty, throws an exception (this shouldn't happen) (TODO)
  * IN: the model
  * OUT: void (model is updated directly)
- * TODO: make an update ports button in index.html ? 
  */
 function updatePorts()
 {
@@ -20,7 +19,7 @@ function updatePorts()
 		var inNode = findInNodes(inKey, nodes);
 		var outNode = findInNodes(outKey, nodes);
 
-		myDiagram.model.linkDataArray[i].fromPort = inNode.outservices[0].name; //TODO does this work, or should links[i] be replaced by model.linkDataArray[i] ?
+		myDiagram.model.linkDataArray[i].fromPort = inNode.outservices[0].name; 
 		myDiagram.model.linkDataArray[i].toPort = outNode.inservices[0].name;		
 	}
 	for (var i=0; i < links.length; i++)
@@ -38,6 +37,7 @@ function updatePorts()
 
 /**
  * outputCodeKeras : updates the code output ; function called by Keras button
+ * see decoders.js for the conversion code
  */
 function outputCodeKeras() 
 {
@@ -53,6 +53,7 @@ function outputCodeKeras()
 
 /**
  * outputCodeTflow : updates the code output; function called by Tflow button
+ * see decoders.js for the conversion code
  */    
 
 function outputCodeTflow()
@@ -68,7 +69,8 @@ function outputCodeTflow()
 }
 
 /**
- *Debug function simply replaces codeOutput with the model in JSON format
+ * Debug function which simply replaces the text in the codeOutput box with the model as a JSON string format
+ * This can be used to save models
  */
 
 function outputCodeDebug()
@@ -94,7 +96,7 @@ function layerMaker(type, nIn, nOut, link) {
 }
 
 /**
- * Returns the string for the node.name field in the model
+ * Returns the string needed for proper use of the node.name field in the model
  * This is important because the node.name field is what shows up on the UI shapes
  */
 function getNodeInfoStr(key)
