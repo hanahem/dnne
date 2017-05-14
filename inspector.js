@@ -127,7 +127,7 @@ function canceller()
 
 function editorHandler(e, obj) 
 {
-	canceller(); //called here to refresh at each new item selection, and not after each edit. 
+	if (!e.control) canceller(); //called here to refresh at each new item selection, and not after each edit. 
 	var msg = infoString(obj);
 	if (msg) 
 	{
