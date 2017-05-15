@@ -11,10 +11,8 @@
  * and extracts its basic information, and returns it as a string
  * formatted like follows :
  * FOR A LINK: "link/from/fromPort/to/toPort"
- * FOR A NODE: "node/key/activation/inservices/outservices/layerType/color"
+ * FOR A NODE: "node/key/activation/input/output/layerType/color"
  * @return: a string formatted as shown above
- *
- * NB: It is also where the inspector handlers are bound to the DOM inspector elements
  */
 function infoString(obj) 
 {
@@ -63,6 +61,16 @@ function infoString(obj)
 	//INSPECTOR CHANGE HANDLERS
 	//========================
 
+	//ACTIVATION CANCELLER
+	//This is the only way we have found to fix the inspector's major problem, but 
+	//this still leads more minor problems with selections and the undo manager. 
+	function canceller()
+	{
+		$( "#inspectActiv" ).off("change");
+		$( "#inspectInput" ).off("change");
+		$( "#inspectOutput" ).off("change");
+		$( "#inspectColor" ).off("change");
+	}
 
 	//ACTIVATION HANDLER
 	$( "#inspectActiv" ).change(function() { //captures changes on the identified HTML tag
@@ -71,6 +79,7 @@ function infoString(obj)
 		myDiagram.model.setDataProperty(obj.part.data, "activation", this.value); // Binds the new input value (this) with the selected GoJs object
 		myDiagram.model.updateNames();
 		myDiagram.model.commitTransaction("activation");
+		canceller();
 	});
 
 	//INPUT SIZE HANDLER (NODE)
@@ -81,6 +90,7 @@ function infoString(obj)
 		myDiagram.model.setDataProperty(obj.part.data.inservices[0], "name", this.value); // Binds the new input value (this) with the selected GoJs object
 		myDiagram.model.updateNames();
 		myDiagram.model.commitTransaction("inservices_input");
+		canceller();
 	});
 
 	//OUTPUT SIZE HANDLER (NODE)
@@ -91,6 +101,7 @@ function infoString(obj)
 		myDiagram.model.setDataProperty(obj.part.data.outservices[0], "name", this.value); // Binds the new input value (this) with the selected GoJs object
 		myDiagram.model.updateNames();
 		myDiagram.model.commitTransaction("outservices_output");
+		canceller();
 	});
 	
 	//INSPECT COLOR HANDLER
@@ -99,23 +110,12 @@ function infoString(obj)
 		myDiagram.model.startTransaction("color");
 		myDiagram.model.setDataProperty(obj.part.data, "color", this.value); // Binds the new input value (this) with the selected GoJs object
 		myDiagram.model.commitTransaction("color");
+		canceller();
 	});
 	
 	return msg;
-}
+	}
 	
-
-/**
- *ACTIVATION CANCELLER
-This function prevents the editing of multiple values, however it refreshes the editor appropriately
- */
-function canceller()
-{
-	$( "#inspectActiv" ).off("change");
-	$( "#inspectInput" ).off("change");
-	$( "#inspectOutput" ).off("change");
-	$( "#inspectColor" ).off("change");
-}
 
 /**
  * This function, after taking the infoString(obj) from an object,
@@ -127,7 +127,6 @@ function canceller()
 
 function editorHandler(e, obj) 
 {
-	if (!e.control) canceller(); //called here to refresh at each new item selection, and not after each edit. 
 	var msg = infoString(obj);
 	if (msg) 
 	{
@@ -149,12 +148,12 @@ function editorHandler(e, obj)
 			var key = document.getElementById("inspectKey");
 			
 			//ASSIGN EACH VALUE
-			key.value = node[1];
+			layerType.value = node[5];
 			activation.value = node[2];
 			input.value = node[3];
 			output.value = node[4];
-			layerType.value = node[5];
 			color.value = node[6];
+			key.value = node[1];
 		}
 
 		//======WHEN LINK=======

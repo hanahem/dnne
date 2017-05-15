@@ -6,11 +6,6 @@
  * This script contains unit tests
  **/
 
-
-/**
- * A single sample model
- * TODO: add more
- */
 var model1 = 
 {
 	copiesArrays: true,
@@ -32,26 +27,26 @@ var model1 =
 	]
 };
 
+model1.updateNames() = function () 
+{
+	model1.name = "";
+	model1.name += 
+};
+
 model1.updateNames();
 
-/**
- * A sample test for the MLPCheck
- * TODO check for all various alerts by creating different model examples
- */
+//TODO check for all various alerts by creating different model examples
+
 function testCase_MLPCheck() 
 {
 	console.log("MLP Checker :\n");
 	console.log("Example 1: expected true; received " + MLPCheck(model1));
 }
 
-
-/**
- * A sample test for the TFlow decoder. 
- * If making new string from copy paste, regex '\n' into '" + \n\t\t' then no regex of '" +' into '\n" +'
- * This test seems a bit artificial; it should somehow be tested in a Python interpreter
- * The most useful part of this test is that it has a small protocol at the end to see when
- * the strings start to differ
- */
+//If making new string from copy paste, regex '\n' into '" + \n\t\t' then no regex of '" +' into '\n" +'
+//This test seems a bit artificial; it should somehow be tested in a Python interpreter
+//The most useful part of this test is that it has a small protocol at the end to see when
+//the strings start to differ
 function testCase_TFDecoder()
 {
 	console.log("TFDecoder :\n");

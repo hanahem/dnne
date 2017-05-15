@@ -73,7 +73,7 @@ function outputCodeTflow()
 
 function outputCodeDebug()
 {
-	var codeOutput = "//The following is the model as a JSON string for debugging\n\n";
+	var codeOutput = "//The following is the model as a JSON string for debugging purposes\n\n";
 	codeOutput += myDiagram.model.toJSON();
 	document.getElementById("codeOutput").value = codeOutput;
 }    
@@ -94,44 +94,17 @@ function layerMaker(type, nIn, nOut, link) {
 }
 
 /**
- * generateNewPosition: generates pseudo-random coordinates according to the former elements
- * @return string: a position string as follows "x y", 
- * where x is the next free coordinate square in the canvas
- * and y is the average of the other elements' y coordinate
- * TODO: test-cases; change so that the new location is where the user dropped the box
- */
-function generateNewPosition() {
-	var nodes = myDiagram.model.nodeDataArray;
-
-	var posArrX = [];
-	var posArrY = [];
-	for(var i=0; i < nodes.length; i++)
-	{
-		var splitStr = nodes[i].loc.split(" ");
-		posArrY.push(parseInt(splitStr[1], 10));
-		if (nodes[i].inOut === 2) continue; //the output node is not deletable, so necessarily the new node should appear to its left
-		posArrX.push(parseInt(splitStr[0], 10));
-	}
-
-	var newX = Math.max.apply(Math, posArrX) + 70;
-
-	var newY = 0;
-	for(i=0; i<posArrY.length; i++) newY += posArrY[i];
-	newY /= posArrY.length;
-
-	return newX + " " + newY;
-}
-
-/**
  * Returns the string for the node.name field in the model
  * This is important because the node.name field is what shows up on the UI shapes
  */
 function getNodeInfoStr(key)
 {
 	var node = findInNodes(key, myDiagram.model.nodeDataArray);
-	var str = node.activation + "\n" + node.inservices[0].name;
-	if (node.inOut === 1) str += "\nINPUT";
-	if (node.inOut === 2) str += "\nOUTPUT";
+	var str = "" + node.activation;
+	if (node.inOut === 0) str += "\n\nHIDDEN: " 		 + node.inservices[0].name;
+	if (node.inOut === 1) str += " (ignored)\n\nINPUT: " + node.inservices[0].name;
+	if (node.inOut === 2) str += "\n\nOUTPUT: " 		 + node.inservices[0].name;
+	else str += "\nNextExpected: " + node.outservices[0].name;
 	return str;
 }
 

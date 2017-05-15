@@ -20,12 +20,14 @@ function MLPCheck(model)
 	{
 		if (links[i].fromPort === "" || links[i].toPort === "")
 		{
-			alert("Some port fields are empty within the links, this might lead to incoherences\nTry fixing this by clicking on Ports");
+			alert("Some port fields are empty within the links, this might lead to incoherences in the code\n"+
+				"Try fixing this by clicking on Ports, then refreshing the code output");
 		}
 		if (links[i].fromPort !== links[i].toPort) 
 		{
-			alert("Conflict at link " + i + 
-				"\nPlease resolve to fix code output");
+			alert("Conflict at link " + i + "in linkDataArray"+ 
+				"\nSee Debug (0 is first element in list) or click on Ports button"+
+				"\nPlease resolve then refresh code output");
 			return false;
 		}
 	}
@@ -45,7 +47,12 @@ function MLPCheck(model)
 		if ((nodes[i].inOut === 1) && (eIn === false))  {eIn  = true; inKey  = nodes[i].key;}
 	}
 
-	if(!(eOut && eIn)) {alert("Missing input or output layer"); return false;}
+	if(!(eOut && eIn)) 
+	{
+		alert("Missing input or output layer"+
+			"\nSince these cannot be added, restart software or Undo previous commands"); 
+		return false;
+	}
 
 	//check that all hidden layers are 1 in, 1 out, by checking the links array
 	var linksTo = [];
@@ -63,7 +70,7 @@ function MLPCheck(model)
 		{
 			if (linksTo[i] === linksTo[j] || linksFr[i] === linksFr[j]) 
 			{
-				alert("Multiple links to, or from, a layer");
+				alert("Multiple links to, or from, a layer\nOnly MLP has been implemented");
 				return false;
 			}
 		}
@@ -81,11 +88,16 @@ function MLPCheck(model)
 	{
 		var currKey = currNode.key;
 		var pos = linksTo.indexOf(currKey);
+		if (pos === -1)
+		{
+			alert("Broken path from Input layer to Output layer");
+			return false;
+		}
 		var newKey = linksFr[pos];
 		if (newKey === inKey) return true; //full path found
 		else currNode = findInNodes(newKey, nodes);
 	}
-	alert("No path found from Input layer to Output layer");
+	alert("Unexpected error in MLPCheck");
 	return false; 
 }
 
@@ -157,11 +169,22 @@ function decoderKeras(model)
 	sortedLayers.push(outputLayer);
     console.log(sortedLayers);  
 
-	for (i=0; i < sortedLayers.length;i++)
+	for (i=0; i < sortedLayers.length-1; i++)
 	{
-		code += "model.add(Dense(units="+ sortedLayers[i].inservices[0].name+"))\n"+ 
-				"model.add(Activation('"+ sortedLayers[i].activation +"'))\n"; 
+		if (i===0)
+		{
+			code += "model.add(Dense(" + sortedLayers[i+1].inservices[0].name +
+					", activation='" + sortedLayers[i+1].activation +
+					"', input_shape=("+ sortedLayers[i].inservices[0].name + ",)))\n";
+		}
+		else
+		{
+			code += "model.add(Dense(units="+ sortedLayers[i+1].inservices[0].name+"))\n"+ 
+					"model.add(Activation('"+ sortedLayers[i+1].activation +"'))\n"; 
+		}
   	}
+
+	code += "model.summary()"	
 
 	return code;  
 }
@@ -267,10 +290,9 @@ function decoderTflow(model)
 		else 	   {code += "layer_" + (i-1) + ",";}
 		code += "weights['W" + i + "']), biases['b" + i + "'])\n";
 		
-		//activation
-		//TODO, should the user be recommended to have the output layer be of linear activation ?
-		if (sortedLayers[i].activation === "linear") continue; //This should send the value to the next tensor as is, just like "linear" in Keras
-		code += "    layer_" + i + " = tf.nn." + sortedLayers[i].activation +
+		//activation, 0th is necessarily linear and ignored.
+		if (sortedLayers[i+1].activation === "linear") continue; //This should send the value to the next tensor as is, just like "linear" in Keras
+		code += "    layer_" + i + " = tf.nn." + sortedLayers[i+1].activation +
 				"(layer_" + i + ")\n";
 	}
 	code += "    return layer_" + (i-1) + "\n\n"; //i-1 because it's i === neuronNbArr.length that breaks the loop
@@ -291,7 +313,7 @@ function decoderTflow(model)
 /**
  * decoderTheano: encodes JSON to Theano syntax
  * IN: model
- * @return: stack list of strings (representing the command lines)
+ * @return: a long string (representing the command lines)
  */
 function decoderTheano(model) {
 
@@ -300,7 +322,7 @@ function decoderTheano(model) {
 /**
  * decoderTorch: transforms  to Torch syntax
  * IN: model object
- * @return: stack list of strings (representing the command lines)
+ * @return: a long string (representing the command lines)
  */
 function decoderTorch(model) {
 
