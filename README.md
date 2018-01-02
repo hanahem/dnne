@@ -1,3 +1,9 @@
+# DNNE : Deep Neural Networks Editor
+DNNE is an intuitive DNNs editor.
+You draw your neural net's graph, and it generates its code in Python using **keras** or **Tensorflow** libraries.
+
+*This project was made by Hanahem Wassim, Duquesne tristan, Sabass Melissa, Kaced Yanis, under the supervision of Prof. David Janiszek @Paris Descartes University.*
+
 app.js : 			uses AngularJS to frame the webpage
 bulma.css : 		contains all the styles of the page
 decoders.js : 		contains the functions to transform a model into code output
